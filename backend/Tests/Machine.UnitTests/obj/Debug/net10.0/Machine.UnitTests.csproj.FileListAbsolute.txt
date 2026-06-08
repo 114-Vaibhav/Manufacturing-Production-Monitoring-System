@@ -1,0 +1,6 @@
+/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Tests/Machine.UnitTests/bin/Debug/net10.0/.msCoverageSourceRootsMapping_Machine.UnitTests
+/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Tests/Machine.UnitTests/obj/Debug/net10.0/Machine.UnitTests.csproj.AssemblyReference.cache
+/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Tests/Machine.UnitTests/obj/Debug/net10.0/Machine.UnitTests.GeneratedMSBuildEditorConfig.editorconfig
+/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Tests/Machine.UnitTests/obj/Debug/net10.0/Machine.UnitTests.AssemblyInfoInputs.cache
+/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Tests/Machine.UnitTests/obj/Debug/net10.0/Machine.UnitTests.AssemblyInfo.cs
+/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Tests/Machine.UnitTests/obj/Debug/net10.0/Machine.UnitTests.csproj.CoreCompileInputs.cache
