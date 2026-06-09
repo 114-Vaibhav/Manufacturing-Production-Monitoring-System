@@ -9,6 +9,7 @@
 /Users/vaibhavgupta/Desktop/CapstoneProject/backend/DataAccessLayer/obj/Debug/net10.0/DataAccessLayer.AssemblyInfoInputs.cache
 /Users/vaibhavgupta/Desktop/CapstoneProject/backend/DataAccessLayer/obj/Debug/net10.0/DataAccessLayer.AssemblyInfo.cs
 /Users/vaibhavgupta/Desktop/CapstoneProject/backend/DataAccessLayer/obj/Debug/net10.0/DataAccessLayer.csproj.CoreCompileInputs.cache
+/Users/vaibhavgupta/Desktop/CapstoneProject/backend/DataAccessLayer/obj/Debug/net10.0/DataAccessLayer.sourcelink.json
 /Users/vaibhavgupta/Desktop/CapstoneProject/backend/DataAccessLayer/obj/Debug/net10.0/DataAcce.E67BD773.Up2Date
 /Users/vaibhavgupta/Desktop/CapstoneProject/backend/DataAccessLayer/obj/Debug/net10.0/DataAccessLayer.dll
 /Users/vaibhavgupta/Desktop/CapstoneProject/backend/DataAccessLayer/obj/Debug/net10.0/refint/DataAccessLayer.dll

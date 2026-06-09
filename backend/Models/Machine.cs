@@ -4,13 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace backend.Models
 {
-        public enum MachineStatus
-    {
-        Operational,
-        UnderMaintenance,
-        OutOfService,
-        Idle
-    }
+  
     public class Machine
     {
         [Key]
@@ -25,6 +19,7 @@ namespace backend.Models
         public MachineStatus Status { get; set; }
 
         public DateTime? LastMaintenanceDate { get; set; }
+
 
         public ICollection<MachineReading>? MachineReadings { get; set; }
 

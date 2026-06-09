@@ -10,6 +10,7 @@
 /Users/vaibhavgupta/Desktop/CapstoneProject/backend/BusinessLayer/obj/Debug/net10.0/BusinessLayer.AssemblyInfoInputs.cache
 /Users/vaibhavgupta/Desktop/CapstoneProject/backend/BusinessLayer/obj/Debug/net10.0/BusinessLayer.AssemblyInfo.cs
 /Users/vaibhavgupta/Desktop/CapstoneProject/backend/BusinessLayer/obj/Debug/net10.0/BusinessLayer.csproj.CoreCompileInputs.cache
+/Users/vaibhavgupta/Desktop/CapstoneProject/backend/BusinessLayer/obj/Debug/net10.0/BusinessLayer.sourcelink.json
 /Users/vaibhavgupta/Desktop/CapstoneProject/backend/BusinessLayer/obj/Debug/net10.0/Business.EA331CBA.Up2Date
 /Users/vaibhavgupta/Desktop/CapstoneProject/backend/BusinessLayer/obj/Debug/net10.0/BusinessLayer.dll
 /Users/vaibhavgupta/Desktop/CapstoneProject/backend/BusinessLayer/obj/Debug/net10.0/refint/BusinessLayer.dll

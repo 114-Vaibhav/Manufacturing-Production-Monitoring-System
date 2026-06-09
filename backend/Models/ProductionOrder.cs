@@ -3,14 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace backend.Models
 {
-    public enum ProductionOrderStatus
-    {
-        Planned,
-        InProgress,
-        Completed,
-        OnHold,
-        Cancelled
-    }
+    
     public class ProductionOrder
     {
         [Key]

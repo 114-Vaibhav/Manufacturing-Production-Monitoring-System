@@ -66,7 +66,8 @@ namespace BusinessLayer.Services
                 }
 
             }
-
+            Console.WriteLine($"User {user.UserName} authenticated successfully with role {user.Role}.");
+            
             return new LoginResponse
             {
                 UserName = user.UserName,

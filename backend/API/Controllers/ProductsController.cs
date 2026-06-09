@@ -1,14 +1,16 @@
 using backend.Models;
 using BusinessLayer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
-        private IProductServices _productServices;
+        private readonly IProductServices _productServices;
 
         public ProductsController(IProductServices productServices)
         {
@@ -16,6 +18,8 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles =
+            "Admin,Operator,ProductionManager,ProductionPlanner,PlantManager,QualityInspector")]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             var products = await _productServices.GetProducts();
@@ -24,6 +28,8 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles =
+            "Admin,Operator,ProductionManager,ProductionPlanner,PlantManager,QualityInspector")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
             var product = await _productServices.GetProduct(id);
@@ -33,10 +39,12 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            return product;
+            return Ok(product);
         }
 
         [HttpPost]
+        [Authorize(Roles =
+            "Admin,ProductionPlanner,ProductionManager,PlantManager")]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
             var createdProduct = await _productServices.CreateProduct(product);
@@ -48,6 +56,8 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles =
+            "Admin,ProductionPlanner,ProductionManager,PlantManager")]
         public async Task<ActionResult<Product>> PutProduct(int id, Product product)
         {
             var updatedProduct = await _productServices.UpdateProduct(id, product);
@@ -56,6 +66,8 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles =
+            "Admin,PlantManager")]
         public async Task<ActionResult<Product>> DeleteProduct(int id)
         {
             var deletedProduct = await _productServices.DeleteProduct(id);

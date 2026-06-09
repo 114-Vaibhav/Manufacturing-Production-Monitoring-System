@@ -1,5 +1,6 @@
 using backend.Models;
 using BusinessLayer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -15,14 +16,23 @@ namespace API.Controllers
             _machineServices = machineServices;
         }
 
+        [Authorize(Roles ="1"+
+        "Admin,PlantManager,ProductionManager," +
+        "ProductionPlanner,QualityInspector," +
+        "MaintenanceTechnician,Operator")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Machine>>> GetMachines()
         {
+            // Console.WriteLine("Getting all machines...");
             var machines = await _machineServices.GetMachines();
 
             return Ok(machines);
         }
 
+        [Authorize(Roles =
+        "Admin,PlantManager,ProductionManager," +
+        "ProductionPlanner,QualityInspector," +
+        "MaintenanceTechnician,Operator")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Machine>> GetMachine(int id)
         {
@@ -36,6 +46,7 @@ namespace API.Controllers
             return machine;
         }
 
+        [Authorize(Roles = "Admin,PlantManager")]
         [HttpPost]
         public async Task<ActionResult<Machine>> PostMachine(Machine machine)
         {
@@ -47,6 +58,7 @@ namespace API.Controllers
                 createdMachine);
         }
 
+        [Authorize(Roles = "Admin,PlantManager")]
         [HttpPut("{id}")]
         public async Task<ActionResult<Machine>> PutMachine(int id, Machine machine)
         {
@@ -55,6 +67,7 @@ namespace API.Controllers
             return Ok(updatedMachine);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Machine>> DeleteMachine(int id)
         {

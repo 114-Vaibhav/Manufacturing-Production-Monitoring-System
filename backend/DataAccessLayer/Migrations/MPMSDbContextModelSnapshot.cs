@@ -69,6 +69,75 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Defects");
                 });
 
+            modelBuilder.Entity("backend.Models.DowntimeReason", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DowntimeReason");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Machine Breakdown"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Power Failure"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Material Shortage"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Tool Change"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Planned Maintenance"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Unplanned Maintenance"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Operator Absence"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Quality Issue"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Setup Changeover"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Network Failure"
+                        });
+                });
+
             modelBuilder.Entity("backend.Models.Location", b =>
                 {
                     b.Property<int>("LocationId")
@@ -78,6 +147,10 @@ namespace DataAccessLayer.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("LocationId"));
 
                     b.Property<string>("FloorNo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LocationName")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -91,6 +164,32 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("LocationId");
 
                     b.ToTable("Locations");
+
+                    b.HasData(
+                        new
+                        {
+                            LocationId = 1,
+                            FloorNo = "1",
+                            LocationName = "Assembly Line",
+                            Status = 0,
+                            TerminalNo = "A1"
+                        },
+                        new
+                        {
+                            LocationId = 2,
+                            FloorNo = "1",
+                            LocationName = "Packaging Line",
+                            Status = 0,
+                            TerminalNo = "A2"
+                        },
+                        new
+                        {
+                            LocationId = 3,
+                            FloorNo = "1",
+                            LocationName = "Quality Control",
+                            Status = 0,
+                            TerminalNo = "A3"
+                        });
                 });
 
             modelBuilder.Entity("backend.Models.Machine", b =>
@@ -123,6 +222,48 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("LocationId");
 
                     b.ToTable("Machines");
+
+                    b.HasData(
+                        new
+                        {
+                            MachineId = 1,
+                            LocationId = 1,
+                            MachineCode = "ASM-001",
+                            MachineName = "Conveyor Belt A",
+                            Status = 0
+                        },
+                        new
+                        {
+                            MachineId = 2,
+                            LocationId = 1,
+                            MachineCode = "ASM-002",
+                            MachineName = "Robotic Arm A",
+                            Status = 0
+                        },
+                        new
+                        {
+                            MachineId = 3,
+                            LocationId = 2,
+                            MachineCode = "PKG-001",
+                            MachineName = "Packaging Machine A",
+                            Status = 0
+                        },
+                        new
+                        {
+                            MachineId = 4,
+                            LocationId = 2,
+                            MachineCode = "PKG-002",
+                            MachineName = "Labeling Machine A",
+                            Status = 0
+                        },
+                        new
+                        {
+                            MachineId = 5,
+                            LocationId = 3,
+                            MachineCode = "QC-001",
+                            MachineName = "Vision Inspection System",
+                            Status = 0
+                        });
                 });
 
             modelBuilder.Entity("backend.Models.MachineReading", b =>

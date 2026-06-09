@@ -27,7 +27,8 @@ namespace BusinessLayer.Services
                 new Claim(ClaimTypes.Name,request.Username),
                 new Claim(ClaimTypes.Role,request.Role.ToString())
             };
-
+            // Console.WriteLine(claims[0].Value);
+            // Console.WriteLine(claims[1].Value);
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key));
 
             var credentials = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);

@@ -4,7 +4,10 @@ using DataAccessLayer.Interfaces;
 using DataAccessLayer.Repositories;
 using BusinessLayer.Interfaces;
 using BusinessLayer.Services;
-
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Security.Claims;
 using API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,10 +33,53 @@ builder.Services.AddScoped(
 );
 
 builder.Services.AddScoped<IUserServices, UserServices>();
-// builder.Services.AddScoped<IMachineServices, MachineServices>();
+builder.Services.AddScoped<IMachineServices, MachineServices>();
 // builder.Services.AddScoped<IDefectServices, DefectServices>();
 // builder.Services.AddScoped<IProductServices, ProductServices>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+
+#region Authentication & Authorization
+
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["JWT:Issuer"],
+
+            ValidateAudience = false,
+
+            ValidateLifetime = true,
+
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!)),
+
+            RoleClaimType = ClaimTypes.Role,
+            NameClaimType = ClaimTypes.Name
+        };
+    });
+
+builder.Services.AddAuthorization();
+
+#endregion
+
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -49,6 +95,9 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
+app.UseCors();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
