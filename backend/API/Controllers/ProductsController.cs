@@ -17,6 +17,7 @@ namespace API.Controllers
             _productServices = productServices;
         }
 
+
         [HttpGet]
         [Authorize(Roles =
             "Admin,Operator,ProductionManager,ProductionPlanner,PlantManager,QualityInspector")]

@@ -34,8 +34,10 @@ builder.Services.AddScoped(
 
 builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<IMachineServices, MachineServices>();
-// builder.Services.AddScoped<IDefectServices, DefectServices>();
-// builder.Services.AddScoped<IProductServices, ProductServices>();
+builder.Services.AddScoped<IMachineReadingServices, MachineReadingServices>();
+builder.Services.AddScoped<IMaintenanceLogServices, MaintenanceLogServices>();
+builder.Services.AddScoped<IDefectServices, DefectServices>();
+builder.Services.AddScoped<IProductServices, ProductServices>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 #region Authentication & Authorization
