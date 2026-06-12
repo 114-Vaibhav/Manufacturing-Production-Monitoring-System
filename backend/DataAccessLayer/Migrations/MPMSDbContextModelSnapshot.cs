@@ -392,7 +392,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("MachineId");
 
-                    b.ToTable("ProductionAnalyticss");
+                    b.ToTable("ProductionAnalytics");
                 });
 
             modelBuilder.Entity("backend.Models.ProductionOrder", b =>

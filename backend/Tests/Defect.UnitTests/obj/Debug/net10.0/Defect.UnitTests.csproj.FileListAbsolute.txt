@@ -4,3 +4,4 @@
 /Users/vaibhavgupta/Desktop/CapstoneProject/backend/Tests/Defect.UnitTests/obj/Debug/net10.0/Defect.UnitTests.AssemblyInfoInputs.cache
 /Users/vaibhavgupta/Desktop/CapstoneProject/backend/Tests/Defect.UnitTests/obj/Debug/net10.0/Defect.UnitTests.AssemblyInfo.cs
 /Users/vaibhavgupta/Desktop/CapstoneProject/backend/Tests/Defect.UnitTests/obj/Debug/net10.0/Defect.UnitTests.csproj.CoreCompileInputs.cache
+/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Tests/Defect.UnitTests/obj/Debug/net10.0/Defect.UnitTests.sourcelink.json

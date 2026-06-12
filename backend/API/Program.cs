@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
 using API.Middleware;
+using API.BackgroundServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,11 @@ builder.Services.AddScoped<IMaintenanceLogServices, MaintenanceLogServices>();
 builder.Services.AddScoped<IDefectServices, DefectServices>();
 builder.Services.AddScoped<IProductServices, ProductServices>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IProductionPlanServices, ProductionPlanServices>();
+builder.Services.AddScoped<IProductionRecordServices, ProductionRecordServices>();
+builder.Services.AddScoped<IProductionAnalyticsServices, ProductionAnalyticsServices>();
+
+builder.Services.AddHostedService<ProductionAnalyticsWorker>();
 
 #region Authentication & Authorization
 
