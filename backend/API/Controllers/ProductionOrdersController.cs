@@ -1,4 +1,6 @@
+using API.Services;
 using backend.Models;
+using backend.Models.DTOs;
 using BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +13,14 @@ namespace API.Controllers
     public class ProductionOrdersController : ControllerBase
     {
         private readonly IProductionOrderServices _productionOrderServices;
+        private readonly IAuditLogService _auditLogService;
 
         public ProductionOrdersController(
-            IProductionOrderServices productionOrderServices)
+            IProductionOrderServices productionOrderServices,
+            IAuditLogService auditLogService)
         {
             _productionOrderServices = productionOrderServices;
+            _auditLogService = auditLogService;
         }
 
         [HttpGet]
@@ -53,11 +58,12 @@ namespace API.Controllers
         [Authorize(Roles =
             "Admin,ProductionManager,PlantManager")]
         public async Task<ActionResult<ProductionOrder>>
-            PostProductionOrder(ProductionOrder productionOrder)
+            PostProductionOrder(ProductionOrderRequest productionOrder)
         {
             var createdOrder =
                 await _productionOrderServices
                     .CreateProductionOrder(productionOrder);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Create", nameof(ProductionOrder), createdOrder.OrderId);
 
             return CreatedAtAction(
                 nameof(GetProductionOrder),
@@ -71,11 +77,12 @@ namespace API.Controllers
         public async Task<ActionResult<ProductionOrder>>
             PutProductionOrder(
                 int id,
-                ProductionOrder productionOrder)
+                ProductionOrderRequest productionOrder)
         {
             var updatedOrder =
                 await _productionOrderServices
                     .UpdateProductionOrder(id, productionOrder);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Update", nameof(ProductionOrder), id);
 
             if (updatedOrder == null)
             {
@@ -94,6 +101,7 @@ namespace API.Controllers
             var deletedOrder =
                 await _productionOrderServices
                     .DeleteProductionOrder(id);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Delete", nameof(ProductionOrder), id);
 
             if (deletedOrder == null)
             {

@@ -1,4 +1,5 @@
 using backend.Models;
+using backend.Models.DTOs;
 
 namespace BusinessLayer.Interfaces
 {
@@ -6,8 +7,8 @@ namespace BusinessLayer.Interfaces
     {
         public Task<List<ProductionPlan>?> GetProductionPlan();
         public Task<ProductionPlan?> GetProductionPlan(int id);
-        public Task<ProductionPlan> CreateProductionPlan(ProductionPlan product);
-        public Task<ProductionPlan?> UpdateProductionPlan(int id, ProductionPlan product);
+        public Task<ProductionPlan> CreateProductionPlan(ProductionPlanRequest product, int createdBy);
+        public Task<ProductionPlan?> UpdateProductionPlan(int id, ProductionPlanRequest product, int createdBy);
         public Task<ProductionPlan?> DeleteProductionPlan(int id);
     }
 }

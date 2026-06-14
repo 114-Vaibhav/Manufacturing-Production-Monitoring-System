@@ -1,4 +1,6 @@
+using API.Services;
 using backend.Models;
+using backend.Models.DTOs;
 using BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +13,14 @@ namespace API.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductServices _productServices;
+        private readonly IAuditLogService _auditLogService;
 
-        public ProductsController(IProductServices productServices)
+        public ProductsController(
+            IProductServices productServices,
+            IAuditLogService auditLogService)
         {
             _productServices = productServices;
+            _auditLogService = auditLogService;
         }
 
 
@@ -46,9 +52,10 @@ namespace API.Controllers
         [HttpPost]
         [Authorize(Roles =
             "Admin,ProductionPlanner,ProductionManager,PlantManager")]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
+        public async Task<ActionResult<Product>> PostProduct(ProductRequest product)
         {
             var createdProduct = await _productServices.CreateProduct(product);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Create", nameof(Product), createdProduct.ProductId);
 
             return CreatedAtAction(
                 nameof(GetProduct),
@@ -59,9 +66,10 @@ namespace API.Controllers
         [HttpPut("{id}")]
         [Authorize(Roles =
             "Admin,ProductionPlanner,ProductionManager,PlantManager")]
-        public async Task<ActionResult<Product>> PutProduct(int id, Product product)
+        public async Task<ActionResult<Product>> PutProduct(int id, ProductRequest product)
         {
             var updatedProduct = await _productServices.UpdateProduct(id, product);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Update", nameof(Product), id);
 
             return Ok(updatedProduct);
         }
@@ -72,6 +80,7 @@ namespace API.Controllers
         public async Task<ActionResult<Product>> DeleteProduct(int id)
         {
             var deletedProduct = await _productServices.DeleteProduct(id);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Delete", nameof(Product), id);
 
             return Ok(deletedProduct);
         }

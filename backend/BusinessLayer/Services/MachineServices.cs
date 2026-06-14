@@ -1,4 +1,5 @@
 using backend.Models;
+using backend.Models.DTOs;
 using BusinessLayer.Interfaces;
 using DataAccessLayer.Interfaces;
 
@@ -23,15 +24,27 @@ namespace BusinessLayer.Services
             return await _machineRepository.Get(id);
         }
 
-        public async Task<Machine> CreateMachine(Machine machine)
+        public async Task<Machine> CreateMachine(MachineRequest request)
         {
+            var machine = MapMachine(request);
             MachineValidator.ValidateMachine(machine);
+
+            var machines = await _machineRepository.GetAll();
+            DuplicateGuard.ThrowIfDuplicate(
+                machines,
+                item => item.MachineName == machine.MachineName &&
+                        item.MachineCode == machine.MachineCode &&
+                        item.LocationId == machine.LocationId &&
+                        item.Status == machine.Status &&
+                        item.LastMaintenanceDate == machine.LastMaintenanceDate,
+                nameof(Machine));
 
             return await _machineRepository.Create(machine);
         }
 
-        public async Task<Machine?> UpdateMachine(int id, Machine machine)
+        public async Task<Machine?> UpdateMachine(int id, MachineRequest request)
         {
+            var machine = MapMachine(request);
             machine.MachineId = id;
             MachineValidator.ValidateMachine(machine);
 
@@ -41,6 +54,18 @@ namespace BusinessLayer.Services
         public async Task<Machine?> DeleteMachine(int id)
         {
             return await _machineRepository.Delete(id);
+        }
+
+        private static Machine MapMachine(MachineRequest request)
+        {
+            return new Machine
+            {
+                MachineName = request.MachineName,
+                MachineCode = request.MachineCode,
+                LocationId = request.LocationId,
+                Status = request.Status,
+                LastMaintenanceDate = request.LastMaintenanceDate
+            };
         }
     }
 }

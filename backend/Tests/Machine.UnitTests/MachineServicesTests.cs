@@ -1,35 +1,54 @@
 using backend.Models;
+using backend.Models.DTOs;
 using BusinessLayer.Exceptions;
 using BusinessLayer.Services;
 using DataAccessLayer.Interfaces;
+using Xunit;
 
 namespace MachineUnitTests
 {
     public class MachineServicesTests
     {
         [Fact]
-        public async Task CreateMachine_WithValidMachine_CreatesMachine()
+        public async Task CreateMachine_WithValidRequest_CreatesMachine()
         {
             var repository = new FakeMachineRepository();
             var service = new MachineServices(repository);
-            var machine = CreateValidMachine();
 
-            var createdMachine = await service.CreateMachine(machine);
+            var createdMachine = await service.CreateMachine(CreateValidRequest());
 
             Assert.Equal("CNC Machine", createdMachine.MachineName);
+            Assert.Equal("CNC-001", createdMachine.MachineCode);
             Assert.Single(repository.Items);
         }
 
         [Fact]
-        public async Task CreateMachine_WithInvalidMachine_ThrowsValidationException()
+        public async Task CreateMachine_WithDuplicateRequest_ThrowsValidationException()
+        {
+            var repository = new FakeMachineRepository();
+            repository.Items.Add(new Machine
+            {
+                MachineName = "CNC Machine",
+                MachineCode = "CNC-001",
+                LocationId = 1,
+                Status = MachineStatus.Running
+            });
+            var service = new MachineServices(repository);
+
+            await Assert.ThrowsAsync<ValidationException>(() =>
+                service.CreateMachine(CreateValidRequest()));
+        }
+
+        [Fact]
+        public async Task CreateMachine_WithInvalidRequest_ThrowsValidationException()
         {
             var repository = new FakeMachineRepository();
             var service = new MachineServices(repository);
-            var machine = CreateValidMachine();
-            machine.MachineName = string.Empty;
+            var request = CreateValidRequest();
+            request.MachineName = string.Empty;
 
             await Assert.ThrowsAsync<ValidationException>(() =>
-                service.CreateMachine(machine));
+                service.CreateMachine(request));
         }
 
         [Fact]
@@ -37,9 +56,8 @@ namespace MachineUnitTests
         {
             var repository = new FakeMachineRepository();
             var service = new MachineServices(repository);
-            var machine = CreateValidMachine();
 
-            var updatedMachine = await service.UpdateMachine(12, machine);
+            var updatedMachine = await service.UpdateMachine(12, CreateValidRequest());
 
             Assert.Equal(12, updatedMachine?.MachineId);
         }
@@ -48,10 +66,15 @@ namespace MachineUnitTests
         public async Task DeleteMachine_RemovesMachine()
         {
             var repository = new FakeMachineRepository();
+            repository.Items.Add(new Machine
+            {
+                MachineId = 1,
+                MachineName = "CNC Machine",
+                MachineCode = "CNC-001",
+                LocationId = 1,
+                Status = MachineStatus.Running
+            });
             var service = new MachineServices(repository);
-            var machine = CreateValidMachine();
-            machine.MachineId = 1;
-            repository.Items.Add(machine);
 
             var deletedMachine = await service.DeleteMachine(1);
 
@@ -59,15 +82,14 @@ namespace MachineUnitTests
             Assert.Empty(repository.Items);
         }
 
-        private static Machine CreateValidMachine()
+        private static MachineRequest CreateValidRequest()
         {
-            return new Machine
+            return new MachineRequest
             {
                 MachineName = "CNC Machine",
                 MachineCode = "CNC-001",
-                Location = "Line A",
-                Status = "Active",
-                LastMaintenanceDate = DateTime.UtcNow.AddDays(-1)
+                LocationId = 1,
+                Status = MachineStatus.Running
             };
         }
 
@@ -101,6 +123,11 @@ namespace MachineUnitTests
             public Task<List<Machine>?> GetAll()
             {
                 return Task.FromResult<List<Machine>?>(Items);
+            }
+
+            public Task<Machine?> GetByUserName(string userName)
+            {
+                return Task.FromResult<Machine?>(null);
             }
 
             public Task<Machine?> Update(int key, Machine item)

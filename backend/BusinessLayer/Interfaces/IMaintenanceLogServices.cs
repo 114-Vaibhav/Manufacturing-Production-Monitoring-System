@@ -1,4 +1,5 @@
 using backend.Models;
+using backend.Models.DTOs;
 
 namespace BusinessLayer.Interfaces
 {
@@ -6,8 +7,8 @@ namespace BusinessLayer.Interfaces
     {
         public Task<List<MaintenanceLog>?> GetMaintenanceLogs();
         public Task<MaintenanceLog?> GetMaintenanceLog(int id);
-        public Task<MaintenanceLog> CreateMaintenanceLog(MaintenanceLog maintenanceLog);
-        public Task<MaintenanceLog?> UpdateMaintenanceLog(int id, MaintenanceLog maintenanceLog);
+        public Task<MaintenanceLog> CreateMaintenanceLog(MaintenanceLogRequest maintenanceLog, int engineerId);
+        public Task<MaintenanceLog?> UpdateMaintenanceLog(int id, MaintenanceLogRequest maintenanceLog, int engineerId);
         public Task<MaintenanceLog?> DeleteMaintenanceLog(int id);
     }
 }

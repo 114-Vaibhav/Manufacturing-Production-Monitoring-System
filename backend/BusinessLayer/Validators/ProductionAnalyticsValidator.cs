@@ -44,17 +44,17 @@ public static class ProductionAnalyticsValidator
         }
 
         // CalculatedDate validation
-        if (productionAnalytics.CalculatedDate == default)
-        {
-            errors.Add(
-                "CalculatedDate is required.");
-        }
-        else if (productionAnalytics.CalculatedDate >
-                 DateTime.UtcNow)
-        {
-            errors.Add(
-                "CalculatedDate cannot be a future date.");
-        }
+        // if (productionAnalytics.CalculatedDate == default)
+        // {
+        //     errors.Add(
+        //         "CalculatedDate is required.");
+        // }
+        // else if (productionAnalytics.CalculatedDate >
+        //          DateTime.UtcNow)
+        // {
+        //     errors.Add(
+        //         "CalculatedDate cannot be a future date.");
+        // }
 
         if (errors.Any())
         {

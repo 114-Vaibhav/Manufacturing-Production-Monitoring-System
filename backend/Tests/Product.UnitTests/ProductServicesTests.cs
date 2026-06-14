@@ -1,35 +1,56 @@
 using backend.Models;
+using backend.Models.DTOs;
 using BusinessLayer.Exceptions;
 using BusinessLayer.Services;
 using DataAccessLayer.Interfaces;
+using Xunit;
 
 namespace ProductUnitTests
 {
     public class ProductServicesTests
     {
         [Fact]
-        public async Task CreateProduct_WithValidProduct_CreatesProduct()
+        public async Task CreateProduct_WithValidRequest_AddsCurrentTime()
         {
             var repository = new FakeProductRepository();
             var service = new ProductServices(repository);
-            var product = CreateValidProduct();
 
-            var createdProduct = await service.CreateProduct(product);
+            var createdProduct = await service.CreateProduct(CreateValidRequest());
 
             Assert.Equal("Steel Gear", createdProduct.ProductName);
+            Assert.True(createdProduct.CreatedAt > DateTime.UtcNow.AddMinutes(-1));
             Assert.Single(repository.Items);
         }
 
         [Fact]
-        public async Task CreateProduct_WithInvalidProduct_ThrowsValidationException()
+        public async Task CreateProduct_WithDuplicateRequest_ThrowsValidationException()
+        {
+            var repository = new FakeProductRepository();
+            repository.Items.Add(new Product
+            {
+                ProductName = "Steel Gear",
+                ProductCode = "PRD-001",
+                Description = "Standard production gear.",
+                UnitPrice = 120.50m,
+                Status = "Active",
+                CreatedAt = DateTime.UtcNow.AddDays(-1)
+            });
+            var service = new ProductServices(repository);
+
+            await Assert.ThrowsAsync<ValidationException>(() =>
+                service.CreateProduct(CreateValidRequest()));
+        }
+
+        [Fact]
+        public async Task CreateProduct_WithInvalidRequest_ThrowsValidationException()
         {
             var repository = new FakeProductRepository();
             var service = new ProductServices(repository);
-            var product = CreateValidProduct();
-            product.ProductCode = string.Empty;
+            var request = CreateValidRequest();
+            request.ProductCode = string.Empty;
 
             await Assert.ThrowsAsync<ValidationException>(() =>
-                service.CreateProduct(product));
+                service.CreateProduct(request));
         }
 
         [Fact]
@@ -37,9 +58,8 @@ namespace ProductUnitTests
         {
             var repository = new FakeProductRepository();
             var service = new ProductServices(repository);
-            var product = CreateValidProduct();
 
-            var updatedProduct = await service.UpdateProduct(5, product);
+            var updatedProduct = await service.UpdateProduct(5, CreateValidRequest());
 
             Assert.Equal(5, updatedProduct?.ProductId);
         }
@@ -48,10 +68,16 @@ namespace ProductUnitTests
         public async Task DeleteProduct_RemovesProduct()
         {
             var repository = new FakeProductRepository();
+            repository.Items.Add(new Product
+            {
+                ProductId = 1,
+                ProductName = "Steel Gear",
+                ProductCode = "PRD-001",
+                Description = "Standard production gear.",
+                UnitPrice = 120.50m,
+                Status = "Active"
+            });
             var service = new ProductServices(repository);
-            var product = CreateValidProduct();
-            product.ProductId = 1;
-            repository.Items.Add(product);
 
             var deletedProduct = await service.DeleteProduct(1);
 
@@ -59,16 +85,15 @@ namespace ProductUnitTests
             Assert.Empty(repository.Items);
         }
 
-        private static Product CreateValidProduct()
+        private static ProductRequest CreateValidRequest()
         {
-            return new Product
+            return new ProductRequest
             {
                 ProductName = "Steel Gear",
                 ProductCode = "PRD-001",
                 Description = "Standard production gear.",
                 UnitPrice = 120.50m,
-                Status = "Active",
-                CreatedAt = DateTime.UtcNow.AddDays(-1)
+                Status = "Active"
             };
         }
 
@@ -102,6 +127,11 @@ namespace ProductUnitTests
             public Task<List<Product>?> GetAll()
             {
                 return Task.FromResult<List<Product>?>(Items);
+            }
+
+            public Task<Product?> GetByUserName(string userName)
+            {
+                return Task.FromResult<Product?>(null);
             }
 
             public Task<Product?> Update(int key, Product item)

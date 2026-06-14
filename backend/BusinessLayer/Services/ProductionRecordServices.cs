@@ -1,4 +1,5 @@
 using backend.Models;
+using backend.Models.DTOs;
 using BusinessLayer.Interfaces;
 using DataAccessLayer.Interfaces;
 
@@ -23,15 +24,26 @@ namespace BusinessLayer.Services
             return await _productionRecordRepository.Get(id);
         }
 
-        public async Task<ProductionRecord> CreateProductionRecord(ProductionRecord product)
+        public async Task<ProductionRecord> CreateProductionRecord(ProductionRecordRequest request)
         {
+            var product = MapProductionRecord(request);
             ProductionRecordValidator.ValidateProductionRecord(product);
+
+            var records = await _productionRecordRepository.GetAll();
+            DuplicateGuard.ThrowIfDuplicate(
+                records,
+                item => item.ProductionPlanId == product.ProductionPlanId &&
+                        item.ProducedQuantity == product.ProducedQuantity,
+                nameof(ProductionRecord));
 
             return await _productionRecordRepository.Create(product);
         }
 
-        public async Task<ProductionRecord?> UpdateProductionRecord(int id, ProductionRecord product)
+        public async Task<ProductionRecord?> UpdateProductionRecord(
+            int id,
+            ProductionRecordRequest request)
         {
+            var product = MapProductionRecord(request);
             product.Id = id;
             ProductionRecordValidator.ValidateProductionRecord(product);
 
@@ -41,6 +53,16 @@ namespace BusinessLayer.Services
         public async Task<ProductionRecord?> DeleteProductionRecord(int id)
         {
             return await _productionRecordRepository.Delete(id);
+        }
+
+        private static ProductionRecord MapProductionRecord(ProductionRecordRequest request)
+        {
+            return new ProductionRecord
+            {
+                ProductionPlanId = request.ProductionPlanId,
+                ProducedQuantity = request.ProducedQuantity,
+                ProductionDate = DateTime.UtcNow
+            };
         }
     }
 }

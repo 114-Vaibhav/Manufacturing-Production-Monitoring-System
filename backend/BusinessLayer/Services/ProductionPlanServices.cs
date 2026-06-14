@@ -1,4 +1,5 @@
 using backend.Models;
+using backend.Models.DTOs;
 using BusinessLayer.Interfaces;
 using DataAccessLayer.Interfaces;
 
@@ -23,15 +24,33 @@ namespace BusinessLayer.Services
             return await _productionPlanRepository.Get(id);
         }
 
-        public async Task<ProductionPlan> CreateProductionPlan(ProductionPlan product)
+        public async Task<ProductionPlan> CreateProductionPlan(
+            ProductionPlanRequest request,
+            int createdBy)
         {
+            var product = MapProductionPlan(request, createdBy);
             ProductionPlanValidator.ValidateProductionPlan(product);
+
+            var plans = await _productionPlanRepository.GetAll();
+            DuplicateGuard.ThrowIfDuplicate(
+                plans,
+                item => item.ProductName == product.ProductName &&
+                        item.TargetQuantity == product.TargetQuantity &&
+                        item.StartDate == product.StartDate &&
+                        item.EndDate == product.EndDate &&
+                        item.Status == product.Status &&
+                        item.CreatedBy == product.CreatedBy,
+                nameof(ProductionPlan));
 
             return await _productionPlanRepository.Create(product);
         }
 
-        public async Task<ProductionPlan?> UpdateProductionPlan(int id, ProductionPlan product)
+        public async Task<ProductionPlan?> UpdateProductionPlan(
+            int id,
+            ProductionPlanRequest request,
+            int createdBy)
         {
+            var product = MapProductionPlan(request, createdBy);
             product.PlanId = id;
             ProductionPlanValidator.ValidateProductionPlan(product);
 
@@ -41,6 +60,21 @@ namespace BusinessLayer.Services
         public async Task<ProductionPlan?> DeleteProductionPlan(int id)
         {
             return await _productionPlanRepository.Delete(id);
+        }
+
+        private static ProductionPlan MapProductionPlan(
+            ProductionPlanRequest request,
+            int createdBy)
+        {
+            return new ProductionPlan
+            {
+                ProductName = request.ProductName,
+                TargetQuantity = request.TargetQuantity,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                Status = request.Status,
+                CreatedBy = createdBy
+            };
         }
     }
 }

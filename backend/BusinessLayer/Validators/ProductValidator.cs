@@ -61,6 +61,8 @@ public static class ProductValidator
             string[] validStatuses =
             {
                 "Active",
+                "Discontinued",
+                "OutOfStock",
                 "Inactive"
             };
 
@@ -73,14 +75,14 @@ public static class ProductValidator
             }
         }
 
-        if (product.CreatedAt == default)
-        {
-            errors.Add("CreatedAt is required.");
-        }
-        else if (product.CreatedAt > DateTime.UtcNow)
-        {
-            errors.Add("CreatedAt cannot be a future date.");
-        }
+        // if (product.CreatedAt == default)
+        // {
+        //     errors.Add("CreatedAt is required.");
+        // }
+        // else if (product.CreatedAt > DateTime.UtcNow)
+        // {
+        //     errors.Add("CreatedAt cannot be a future date.");
+        // }
 
         if (errors.Any())
         {

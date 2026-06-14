@@ -1,4 +1,6 @@
+using API.Services;
 using backend.Models;
+using backend.Models.DTOs;
 using BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +12,14 @@ namespace API.Controllers
     public class MachineReadingsController : ControllerBase
     {
         private readonly IMachineReadingServices _machineReadingServices;
+        private readonly IAuditLogService _auditLogService;
 
-        public MachineReadingsController(IMachineReadingServices machineReadingServices)
+        public MachineReadingsController(
+            IMachineReadingServices machineReadingServices,
+            IAuditLogService auditLogService)
         {
             _machineReadingServices = machineReadingServices;
+            _auditLogService = auditLogService;
         }
 
         [Authorize(Roles =
@@ -50,10 +56,11 @@ namespace API.Controllers
             "MaintenanceTechnician,Operator")]
         [HttpPost]
         public async Task<ActionResult<MachineReading>> PostMachineReading(
-            MachineReading machineReading)
+            MachineReadingRequest machineReading)
         {
             var createdMachineReading =
                 await _machineReadingServices.CreateMachineReading(machineReading);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Create", nameof(MachineReading), createdMachineReading.ReadingId);
 
             return CreatedAtAction(
                 nameof(GetMachineReading),
@@ -67,10 +74,11 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<MachineReading>> PutMachineReading(
             int id,
-            MachineReading machineReading)
+            MachineReadingRequest machineReading)
         {
             var updatedMachineReading =
                 await _machineReadingServices.UpdateMachineReading(id, machineReading);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Update", nameof(MachineReading), id);
 
             if (updatedMachineReading == null)
             {
@@ -86,6 +94,7 @@ namespace API.Controllers
         {
             var deletedMachineReading =
                 await _machineReadingServices.DeleteMachineReading(id);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Delete", nameof(MachineReading), id);
 
             if (deletedMachineReading == null)
             {

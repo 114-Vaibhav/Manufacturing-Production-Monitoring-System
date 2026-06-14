@@ -1,4 +1,6 @@
+using API.Services;
 using backend.Models;
+using backend.Models.DTOs;
 using BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,13 +12,17 @@ namespace API.Controllers
     public class MachinesController : ControllerBase
     {
         private IMachineServices _machineServices;
+        private readonly IAuditLogService _auditLogService;
 
-        public MachinesController(IMachineServices machineServices)
+        public MachinesController(
+            IMachineServices machineServices,
+            IAuditLogService auditLogService)
         {
             _machineServices = machineServices;
+            _auditLogService = auditLogService;
         }
 
-        [Authorize(Roles ="1"+
+        [Authorize(Roles =
         "Admin,PlantManager,ProductionManager," +
         "ProductionPlanner,QualityInspector," +
         "MaintenanceTechnician,Operator")]
@@ -48,9 +54,10 @@ namespace API.Controllers
 
         [Authorize(Roles = "Admin,PlantManager")]
         [HttpPost]
-        public async Task<ActionResult<Machine>> PostMachine(Machine machine)
+        public async Task<ActionResult<Machine>> PostMachine(MachineRequest machine)
         {
             var createdMachine = await _machineServices.CreateMachine(machine);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Create", nameof(Machine), createdMachine.MachineId);
 
             return CreatedAtAction(
                 nameof(GetMachine),
@@ -60,9 +67,10 @@ namespace API.Controllers
 
         [Authorize(Roles = "Admin,PlantManager")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<Machine>> PutMachine(int id, Machine machine)
+        public async Task<ActionResult<Machine>> PutMachine(int id, MachineRequest machine)
         {
             var updatedMachine = await _machineServices.UpdateMachine(id, machine);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Update", nameof(Machine), id);
 
             return Ok(updatedMachine);
         }
@@ -72,6 +80,7 @@ namespace API.Controllers
         public async Task<ActionResult<Machine>> DeleteMachine(int id)
         {
             var deletedMachine = await _machineServices.DeleteMachine(id);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Delete", nameof(Machine), id);
 
             return Ok(deletedMachine);
         }

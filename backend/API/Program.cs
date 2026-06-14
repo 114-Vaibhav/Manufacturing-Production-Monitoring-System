@@ -10,6 +10,7 @@ using System.Text;
 using System.Security.Claims;
 using API.Middleware;
 using API.BackgroundServices;
+using API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +44,9 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IProductionPlanServices, ProductionPlanServices>();
 builder.Services.AddScoped<IProductionRecordServices, ProductionRecordServices>();
 builder.Services.AddScoped<IProductionAnalyticsServices, ProductionAnalyticsServices>();
-
+builder.Services.AddSingleton<IAuditLogService, InMemoryAuditLogService>();
+builder.Services.AddScoped<IIoTSensorService, IoTSensorService>();
+builder.Services.AddHostedService<MachineSensorSimulatorService>();
 builder.Services.AddHostedService<ProductionAnalyticsWorker>();
 
 #region Authentication & Authorization

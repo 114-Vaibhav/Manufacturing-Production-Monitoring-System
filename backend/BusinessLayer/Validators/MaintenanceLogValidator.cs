@@ -66,15 +66,15 @@ public static class MaintenanceLogValidator
             }
         }
 
-        // MaintenanceDate validation
-        if (maintenanceLog.MaintenanceDate == default)
-        {
-            errors.Add("Maintenance Date is required.");
-        }
-        else if (maintenanceLog.MaintenanceDate > DateTime.UtcNow)
-        {
-            errors.Add("Maintenance Date cannot be in the future.");
-        }
+        // // MaintenanceDate validation
+        // if (maintenanceLog.MaintenanceDate == default)
+        // {
+        //     errors.Add("Maintenance Date is required.");
+        // }
+        // else if (maintenanceLog.MaintenanceDate > DateTime.UtcNow)
+        // {
+        //     errors.Add("Maintenance Date cannot be in the future.");
+        // }
 
         // Throw validation exception if any errors exist
         if (errors.Any())

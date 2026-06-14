@@ -1,4 +1,5 @@
 using backend.Models;
+using backend.Models.DTOs;
 
 namespace BusinessLayer.Interfaces
 {
@@ -6,8 +7,8 @@ namespace BusinessLayer.Interfaces
     {
         public Task<List<Machine>?> GetMachines();
         public Task<Machine?> GetMachine(int id);
-        public Task<Machine> CreateMachine(Machine machine);
-        public Task<Machine?> UpdateMachine(int id, Machine machine);
+        public Task<Machine> CreateMachine(MachineRequest machine);
+        public Task<Machine?> UpdateMachine(int id, MachineRequest machine);
         public Task<Machine?> DeleteMachine(int id);
     }
 }

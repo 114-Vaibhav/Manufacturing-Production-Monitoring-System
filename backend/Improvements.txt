@@ -1,0 +1,2 @@
+1. Create DTOs 
+2. fetch current User and date

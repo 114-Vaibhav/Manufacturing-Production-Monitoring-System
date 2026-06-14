@@ -20,10 +20,12 @@ namespace BusinessLayer.Services
             _issuer = configuration["JWT:Issuer"] ?? "Any Server";
             _duration = configuration["JWT:DurationInMinutes"] ?? "60";
         }
+
         public string CreateNewToken(TokenRequest request)
         {
             var claims = new[]
             {
+                new Claim(ClaimTypes.NameIdentifier, request.UserId.ToString()),
                 new Claim(ClaimTypes.Name,request.Username),
                 new Claim(ClaimTypes.Role,request.Role.ToString())
             };

@@ -22,14 +22,14 @@ public static class ProductionRecordValidator
             errors.Add("ProducedQuantity must be greater than 0.");
         }
 
-        if (record.ProductionDate == default)
-        {
-            errors.Add("ProductionDate is required.");
-        }
-        else if (record.ProductionDate > DateTime.UtcNow)
-        {
-            errors.Add("ProductionDate cannot be in the future.");
-        }
+        // if (record.ProductionDate == default)
+        // {
+        //     errors.Add("ProductionDate is required.");
+        // }
+        // else if (record.ProductionDate > DateTime.UtcNow)
+        // {
+        //     errors.Add("ProductionDate cannot be in the future.");
+        // }
 
         if (errors.Any())
         {

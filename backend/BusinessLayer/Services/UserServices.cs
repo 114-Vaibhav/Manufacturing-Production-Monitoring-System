@@ -2,11 +2,9 @@ using backend.Models;
 using BusinessLayer.Interfaces;
 using DataAccessLayer.Interfaces;
 using backend.Models.DTOs;
-using BusinessLayer.Services;
 using System.Security.Cryptography;
 using System.Security.Authentication;
 using System.Text;
-using BusinessLayer.Interfaces;
 
 namespace BusinessLayer.Services
 {
@@ -24,7 +22,7 @@ namespace BusinessLayer.Services
         {
             UserValidator.ValidateUser(request);
 
-            User user = await MapUserObjectFromRequest(request);
+            User user = MapUserObjectFromRequest(request);
             User userFromDb = await _userRepository.Create(user);
             return new RegisterUserResponse
             {
@@ -32,7 +30,7 @@ namespace BusinessLayer.Services
                 Role = userFromDb.Role
             };
         }
-        private async Task<User> MapUserObjectFromRequest(RegisterUserRequest request)
+        private static User MapUserObjectFromRequest(RegisterUserRequest request)
         {
             HMACSHA256 hMACSHA256 = new HMACSHA256();
             User user = new User();
@@ -73,6 +71,7 @@ namespace BusinessLayer.Services
                 UserName = user.UserName,
                 Token = _tokenService.CreateNewToken(new TokenRequest
                 {
+                    UserId = user.UserId,
                     Username = user.UserName,
                     Role = user.Role
                 })

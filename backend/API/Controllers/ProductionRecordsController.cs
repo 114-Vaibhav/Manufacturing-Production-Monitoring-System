@@ -1,4 +1,6 @@
+using API.Services;
 using backend.Models;
+using backend.Models.DTOs;
 using BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +13,14 @@ namespace API.Controllers
     public class ProductionRecordsController : ControllerBase
     {
         private readonly IProductionRecordServices _productionRecordServices;
+        private readonly IAuditLogService _auditLogService;
 
         public ProductionRecordsController(
-            IProductionRecordServices productionRecordServices)
+            IProductionRecordServices productionRecordServices,
+            IAuditLogService auditLogService)
         {
             _productionRecordServices = productionRecordServices;
+            _auditLogService = auditLogService;
         }
 
         [HttpGet]
@@ -55,11 +60,12 @@ namespace API.Controllers
         [Authorize(Roles =
             "Admin,Operator,ProductionManager,PlantManager")]
         public async Task<ActionResult<ProductionRecord>>
-            PostProductionRecord(ProductionRecord productionRecord)
+            PostProductionRecord(ProductionRecordRequest productionRecord)
         {
             var createdRecord =
                 await _productionRecordServices
                     .CreateProductionRecord(productionRecord);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Create", nameof(ProductionRecord), createdRecord.Id);
 
             return CreatedAtAction(
                 nameof(GetProductionRecord),
@@ -73,11 +79,12 @@ namespace API.Controllers
         public async Task<ActionResult<ProductionRecord>>
             PutProductionRecord(
                 int id,
-                ProductionRecord productionRecord)
+                ProductionRecordRequest productionRecord)
         {
             var updatedRecord =
                 await _productionRecordServices
                     .UpdateProductionRecord(id, productionRecord);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Update", nameof(ProductionRecord), id);
 
             if (updatedRecord == null)
             {
@@ -96,6 +103,7 @@ namespace API.Controllers
             var deletedRecord =
                 await _productionRecordServices
                     .DeleteProductionRecord(id);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Delete", nameof(ProductionRecord), id);
 
             if (deletedRecord == null)
             {

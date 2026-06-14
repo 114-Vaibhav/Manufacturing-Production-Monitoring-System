@@ -1,4 +1,6 @@
+using API.Services;
 using backend.Models;
+using backend.Models.DTOs;
 using BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +13,14 @@ namespace API.Controllers
     public class ProductionPlansController : ControllerBase
     {
         private readonly IProductionPlanServices _productionPlanServices;
+        private readonly IAuditLogService _auditLogService;
 
         public ProductionPlansController(
-            IProductionPlanServices productionPlanServices)
+            IProductionPlanServices productionPlanServices,
+            IAuditLogService auditLogService)
         {
             _productionPlanServices = productionPlanServices;
+            _auditLogService = auditLogService;
         }
 
         [HttpGet]
@@ -51,11 +56,12 @@ namespace API.Controllers
         [Authorize(Roles =
             "Admin,PlantManager,ProductionManager,ProductionPlanner")]
         public async Task<ActionResult<ProductionPlan>>
-            PostProductionPlan(ProductionPlan productionPlan)
+            PostProductionPlan(ProductionPlanRequest productionPlan)
         {
             var createdPlan =
                 await _productionPlanServices
-                    .CreateProductionPlan(productionPlan);
+                    .CreateProductionPlan(productionPlan, this.GetCurrentUserId());
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Create", nameof(ProductionPlan), createdPlan.PlanId);
 
             return CreatedAtAction(
                 nameof(GetProductionPlan),
@@ -69,11 +75,12 @@ namespace API.Controllers
         public async Task<ActionResult<ProductionPlan>>
             PutProductionPlan(
                 int id,
-                ProductionPlan productionPlan)
+                ProductionPlanRequest productionPlan)
         {
             var updatedPlan =
                 await _productionPlanServices
-                    .UpdateProductionPlan(id, productionPlan);
+                    .UpdateProductionPlan(id, productionPlan, this.GetCurrentUserId());
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Update", nameof(ProductionPlan), id);
 
             if (updatedPlan == null)
             {
@@ -92,6 +99,7 @@ namespace API.Controllers
             var deletedPlan =
                 await _productionPlanServices
                     .DeleteProductionPlan(id);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Delete", nameof(ProductionPlan), id);
 
             if (deletedPlan == null)
             {

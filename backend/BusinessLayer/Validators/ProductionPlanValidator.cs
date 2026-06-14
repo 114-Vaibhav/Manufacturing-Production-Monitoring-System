@@ -54,10 +54,10 @@ public static class ProductionPlanValidator
             errors.Add("Invalid Production Plan Status.");
         }
 
-        if (plan.CreatedBy <= 0)
-        {
-            errors.Add("CreatedBy is required.");
-        }
+        // if (plan.CreatedBy <= 0)
+        // {
+        //     errors.Add("CreatedBy is required.");
+        // }
 
         if (errors.Any())
         {

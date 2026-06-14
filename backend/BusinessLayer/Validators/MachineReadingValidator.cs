@@ -40,14 +40,14 @@ public static class MachineReadingValidator
         }
 
         // Timestamp validation
-        if (machineReading.Timestamp == default)
-        {
-            errors.Add("Timestamp is required.");
-        }
-        else if (machineReading.Timestamp > DateTime.UtcNow)
-        {
-            errors.Add("Timestamp cannot be in the future.");
-        }
+        // if (machineReading.Timestamp == default)
+        // {
+        //     errors.Add("Timestamp is required.");
+        // }
+        // else if (machineReading.Timestamp > DateTime.UtcNow)
+        // {
+        //     errors.Add("Timestamp cannot be in the future.");
+        // }
 
         // Throw exception if any validation errors exist
         if (errors.Any())

@@ -1,4 +1,6 @@
+using API.Services;
 using backend.Models;
+using backend.Models.DTOs;
 using BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +13,14 @@ namespace API.Controllers
     public class DefectsController : ControllerBase
     {
         private readonly IDefectServices _defectServices;
+        private readonly IAuditLogService _auditLogService;
 
-        public DefectsController(IDefectServices defectServices)
+        public DefectsController(
+            IDefectServices defectServices,
+            IAuditLogService auditLogService)
         {
             _defectServices = defectServices;
+            _auditLogService = auditLogService;
         }
 
         [HttpGet]
@@ -45,9 +51,10 @@ namespace API.Controllers
         [HttpPost]
         [Authorize(Roles =
             "Admin,QualityInspector,Operator")]
-        public async Task<ActionResult<Defect>> PostDefect(Defect defect)
+        public async Task<ActionResult<Defect>> PostDefect(DefectRequest defect)
         {
-            var createdDefect = await _defectServices.CreateDefect(defect);
+            var createdDefect = await _defectServices.CreateDefect(defect, this.GetCurrentUserId());
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Create", nameof(Defect), createdDefect.DefectId);
 
             return CreatedAtAction(
                 nameof(GetDefect),
@@ -58,10 +65,11 @@ namespace API.Controllers
         [HttpPut("{id}")]
         [Authorize(Roles =
             "Admin,QualityInspector,ProductionManager")]
-        public async Task<ActionResult<Defect>> PutDefect(int id, Defect defect)
+        public async Task<ActionResult<Defect>> PutDefect(int id, DefectRequest defect)
         {
             var updatedDefect =
-                await _defectServices.UpdateDefect(id, defect);
+                await _defectServices.UpdateDefect(id, defect, this.GetCurrentUserId());
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Update", nameof(Defect), id);
 
             return Ok(updatedDefect);
         }
@@ -73,6 +81,7 @@ namespace API.Controllers
         {
             var deletedDefect =
                 await _defectServices.DeleteDefect(id);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Delete", nameof(Defect), id);
 
             return Ok(deletedDefect);
         }

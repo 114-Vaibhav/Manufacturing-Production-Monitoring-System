@@ -1,35 +1,57 @@
 using backend.Models;
+using backend.Models.DTOs;
 using BusinessLayer.Exceptions;
 using BusinessLayer.Services;
 using DataAccessLayer.Interfaces;
+using Xunit;
 
 namespace DefectUnitTests
 {
     public class DefectServicesTests
     {
         [Fact]
-        public async Task CreateDefect_WithValidDefect_CreatesDefect()
+        public async Task CreateDefect_WithValidRequest_AddsCurrentUserAndTime()
         {
             var repository = new FakeDefectRepository();
             var service = new DefectServices(repository);
-            var defect = CreateValidDefect();
 
-            var createdDefect = await service.CreateDefect(defect);
+            var createdDefect = await service.CreateDefect(CreateValidRequest(), reportedBy: 4);
 
-            Assert.Equal("Surface Scratch", createdDefect.DefectType);
+            Assert.Equal(4, createdDefect.ReportedBy);
+            Assert.True(createdDefect.CreatedAt > DateTime.UtcNow.AddMinutes(-1));
             Assert.Single(repository.Items);
         }
 
         [Fact]
-        public async Task CreateDefect_WithInvalidDefect_ThrowsValidationException()
+        public async Task CreateDefect_WithDuplicateRequest_ThrowsValidationException()
+        {
+            var repository = new FakeDefectRepository();
+            repository.Items.Add(new Defect
+            {
+                OrderId = 1,
+                MachineId = 2,
+                Type = DefectType.Quality,
+                Severity = DefectSeverity.Medium,
+                Description = "Scratch found during inspection.",
+                ReportedBy = 4,
+                CreatedAt = DateTime.UtcNow.AddHours(-1)
+            });
+            var service = new DefectServices(repository);
+
+            await Assert.ThrowsAsync<ValidationException>(() =>
+                service.CreateDefect(CreateValidRequest(), reportedBy: 4));
+        }
+
+        [Fact]
+        public async Task CreateDefect_WithInvalidRequest_ThrowsValidationException()
         {
             var repository = new FakeDefectRepository();
             var service = new DefectServices(repository);
-            var defect = CreateValidDefect();
-            defect.MachineId = 0;
+            var request = CreateValidRequest();
+            request.MachineId = 0;
 
             await Assert.ThrowsAsync<ValidationException>(() =>
-                service.CreateDefect(defect));
+                service.CreateDefect(request, reportedBy: 4));
         }
 
         [Fact]
@@ -37,9 +59,9 @@ namespace DefectUnitTests
         {
             var repository = new FakeDefectRepository();
             var service = new DefectServices(repository);
-            var defect = CreateValidDefect();
 
-            var updatedDefect = await service.UpdateDefect(7, defect);
+            var updatedDefect =
+                await service.UpdateDefect(7, CreateValidRequest(), reportedBy: 4);
 
             Assert.Equal(7, updatedDefect?.DefectId);
         }
@@ -48,10 +70,17 @@ namespace DefectUnitTests
         public async Task DeleteDefect_RemovesDefect()
         {
             var repository = new FakeDefectRepository();
+            repository.Items.Add(new Defect
+            {
+                DefectId = 1,
+                OrderId = 1,
+                MachineId = 2,
+                Type = DefectType.Quality,
+                Severity = DefectSeverity.Medium,
+                Description = "Scratch found during inspection.",
+                ReportedBy = 4
+            });
             var service = new DefectServices(repository);
-            var defect = CreateValidDefect();
-            defect.DefectId = 1;
-            repository.Items.Add(defect);
 
             var deletedDefect = await service.DeleteDefect(1);
 
@@ -59,17 +88,15 @@ namespace DefectUnitTests
             Assert.Empty(repository.Items);
         }
 
-        private static Defect CreateValidDefect()
+        private static DefectRequest CreateValidRequest()
         {
-            return new Defect
+            return new DefectRequest
             {
                 OrderId = 1,
-                MachineId = 1,
-                DefectType = "Surface Scratch",
-                Severity = "Medium",
-                Description = "Scratch found during quality inspection.",
-                ReportedBy = 1,
-                CreatedAt = DateTime.UtcNow.AddMinutes(-10)
+                MachineId = 2,
+                Type = DefectType.Quality,
+                Severity = DefectSeverity.Medium,
+                Description = "Scratch found during inspection."
             };
         }
 
@@ -103,6 +130,11 @@ namespace DefectUnitTests
             public Task<List<Defect>?> GetAll()
             {
                 return Task.FromResult<List<Defect>?>(Items);
+            }
+
+            public Task<Defect?> GetByUserName(string userName)
+            {
+                return Task.FromResult<Defect?>(null);
             }
 
             public Task<Defect?> Update(int key, Defect item)

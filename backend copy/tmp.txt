@@ -1,0 +1,367 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace backend.Models
+{
+    public enum DefectSeverity
+    {
+        Low,
+        Medium,
+        High,
+        Critical
+    }
+    public enum DefectType
+    {
+        Mechanical,
+        Electrical,
+        Software,
+        Quality
+    }
+    public class Defect
+    {
+        [Key]
+        public int DefectId { get; set; }
+
+        public int OrderId { get; set; }
+
+        public ProductionOrder? ProductionOrder { get; set; }
+
+        public int MachineId { get; set; }
+
+        public Machine? Machine { get; set; }
+
+        public DefectType Type { get; set; }
+
+        public DefectSeverity Severity { get; set; }
+
+        public string Description { get; set; } = string.Empty;
+
+        public int ReportedBy { get; set; }
+
+        public User? Reporter { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+    }
+}
+
+namespace backend.Models;
+
+public class DowntimeReason
+{
+    public int Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+}
+
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace backend.Models
+{
+    public enum MachineStatus
+    {
+        Running,
+        Idle,
+        Maintenance,
+        OutOfService
+    
+    }
+    public enum ProductionOrderStatus
+    {
+        Planned,
+        InProgress,
+        Completed,
+        OnHold,
+        Cancelled
+    }
+
+    public enum ShiftType
+    {
+        Morning,
+        Evening,
+        Night
+    }
+}
+
+namespace backend.Models
+{
+    public enum LocationStatus
+    {
+        Active,
+        Inactive,
+        UnderMaintenance
+    }
+    public class Location
+    {
+        public int LocationId { get; set; }
+        public string LocationName { get; set; } = string.Empty;
+        public string FloorNo { get; set; } = string.Empty;
+
+        public string TerminalNo { get; set; } = string.Empty;
+        
+        public LocationStatus Status { get; set; }
+    }
+}
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace backend.Models
+{
+  
+    public class Machine
+    {
+        [Key]
+        public int MachineId { get; set; }
+
+        public string MachineName { get; set; } = string.Empty;
+
+        public string MachineCode { get; set; } = string.Empty;
+
+        public int LocationId { get; set; }
+
+        public MachineStatus Status { get; set; }
+
+        public DateTime? LastMaintenanceDate { get; set; }
+
+
+        public ICollection<MachineReading>? MachineReadings { get; set; }
+
+        public ICollection<ProductionOrder>? ProductionOrders { get; set; }
+
+        public ICollection<Defect>? Defects { get; set; }
+
+        public ICollection<MaintenanceLog>? MaintenanceLogs { get; set; }
+
+        public ICollection<ProductionAnalytics>? Analytics { get; set; }
+
+        public Location? Location { get; set; }
+    }
+}
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace backend.Models
+{
+    public class MachineReading
+    {
+        [Key]
+        public int ReadingId { get; set; }
+
+        public int MachineId { get; set; }
+
+        public Machine? Machine { get; set; }
+
+        public double Temperature { get; set; }
+
+        public double Vibration { get; set; }
+
+        public double PowerConsumption { get; set; }
+
+        public DateTime Timestamp { get; set; }
+    }
+}
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace backend.Models
+{
+    public class MaintenanceLog
+    {
+        [Key]
+        public int LogId { get; set; }
+
+        public int MachineId { get; set; }
+
+        public Machine? Machine { get; set; }
+
+        public int EngineerId { get; set; }
+
+        public User? Engineer { get; set; }
+
+        public string IssueDescription { get; set; } = string.Empty;
+
+        public string Resolution { get; set; } = string.Empty;
+
+        public DateTime MaintenanceDate { get; set; }
+    }
+}
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace backend.Models
+{
+    public enum ProductStatus
+    {
+        Active,
+        Discontinued,
+        OutOfStock
+    }
+    public class Product
+    {
+        [Key]
+        public int ProductId { get; set; }
+
+        public string ProductName { get; set; } = string.Empty;
+
+        public string ProductCode { get; set; } = string.Empty;
+
+        public string Description { get; set; } = string.Empty;
+
+        public decimal UnitPrice { get; set; }
+
+        public string Status { get; set; } = string.Empty;
+
+        public DateTime CreatedAt { get; set; }
+    }
+}
+
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace backend.Models
+{
+    public class ProductionAnalytics
+    {
+        [Key]
+        public int AnalyticsId { get; set; }
+
+        public int MachineId { get; set; }
+
+        public Machine? Machine { get; set; }
+
+        public double Efficiency { get; set; }
+
+        public double Downtime { get; set; }
+
+        public double DefectRate { get; set; }
+
+        public DateTime CalculatedDate { get; set; }
+    }
+}
+
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace backend.Models
+{
+    
+    public class ProductionOrder
+    {
+        [Key]
+        public int OrderId { get; set; }
+
+        public int PlanId { get; set; }
+
+        public ProductionPlan? ProductionPlan { get; set; }
+
+        public int MachineId { get; set; }
+
+        public Machine? Machine { get; set; }
+
+        public int Quantity { get; set; }
+
+        public int ProducedQuantity { get; set; }
+
+        public ProductionOrderStatus Status { get; set; }
+
+        public ICollection<Defect>? Defects { get; set; }
+    }
+}
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace backend.Models
+{
+    public enum ProductionPlanStatus
+    {
+        Planned,
+        InProgress,
+        Completed,
+        OnHold,
+        Cancelled
+    }
+    public class ProductionPlan
+    {
+        [Key]
+        public int PlanId { get; set; }
+
+        public string ProductName { get; set; } = string.Empty;
+
+        public int TargetQuantity { get; set; }
+
+        public DateTime StartDate { get; set; }
+
+        public DateTime EndDate { get; set; }
+
+        public ProductionPlanStatus Status { get; set; }
+
+        public int CreatedBy { get; set; }
+
+        public User? Creator { get; set; }
+
+        public ICollection<ProductionOrder>? ProductionOrders { get; set; }
+    }
+}
+namespace backend.Models;
+public class ProductionRecord
+{
+    public int Id { get; set; }
+
+    public int ProductionPlanId { get; set; }
+
+    public int ProducedQuantity { get; set; }
+
+    public DateTime ProductionDate { get; set; }
+
+    public ProductionPlan? ProductionPlan { get; set; }
+}
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace backend.Models
+{
+    public enum UserRole
+    {
+        Admin,
+        Operator,
+        ProductionManager,
+        QualityInspector,
+        MaintenanceTechnician,
+        ProductionPlanner,
+        PlantManager
+
+    }
+    public enum UserStatus
+    {
+        Active,
+        Inactive,
+        Suspended
+    }
+    public class User
+    {
+        [Key]
+        public int UserId { get; set; }
+        public string UserName { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty;
+
+        public string Email { get; set; } = string.Empty;
+
+        public byte[] PasswordHash { get; set; } = Array.Empty<byte>();
+        public byte[] HashKey { get; set; } = Array.Empty<byte>();
+        public UserRole Role { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public UserStatus Status { get; set; }
+
+        public ICollection<ProductionPlan>? ProductionPlans { get; set; }
+
+        public ICollection<Defect>? ReportedDefects { get; set; }
+    }
+}

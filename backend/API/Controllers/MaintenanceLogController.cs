@@ -1,4 +1,6 @@
+using API.Services;
 using backend.Models;
+using backend.Models.DTOs;
 using BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +12,14 @@ namespace API.Controllers
     public class MaintenanceLogsController : ControllerBase
     {
         private readonly IMaintenanceLogServices _maintenanceLogServices;
+        private readonly IAuditLogService _auditLogService;
 
         public MaintenanceLogsController(
-            IMaintenanceLogServices maintenanceLogServices)
+            IMaintenanceLogServices maintenanceLogServices,
+            IAuditLogService auditLogService)
         {
             _maintenanceLogServices = maintenanceLogServices;
+            _auditLogService = auditLogService;
         }
 
         // View all maintenance logs
@@ -51,10 +56,11 @@ namespace API.Controllers
             "Admin,PlantManager,MaintenanceTechnician")]
         [HttpPost]
         public async Task<ActionResult<MaintenanceLog>> PostMaintenanceLog(
-            MaintenanceLog maintenanceLog)
+            MaintenanceLogRequest maintenanceLog)
         {
             var createdMaintenanceLog =
-                await _maintenanceLogServices.CreateMaintenanceLog(maintenanceLog);
+                await _maintenanceLogServices.CreateMaintenanceLog(maintenanceLog, this.GetCurrentUserId());
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Create", nameof(MaintenanceLog), createdMaintenanceLog.LogId);
 
             return CreatedAtAction(
                 nameof(GetMaintenanceLog),
@@ -68,10 +74,11 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<MaintenanceLog>> PutMaintenanceLog(
             int id,
-            MaintenanceLog maintenanceLog)
+            MaintenanceLogRequest maintenanceLog)
         {
             var updatedMaintenanceLog =
-                await _maintenanceLogServices.UpdateMaintenanceLog(id, maintenanceLog);
+                await _maintenanceLogServices.UpdateMaintenanceLog(id, maintenanceLog, this.GetCurrentUserId());
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Update", nameof(MaintenanceLog), id);
 
             if (updatedMaintenanceLog == null)
             {
@@ -88,6 +95,7 @@ namespace API.Controllers
         {
             var deletedMaintenanceLog =
                 await _maintenanceLogServices.DeleteMaintenanceLog(id);
+            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Delete", nameof(MaintenanceLog), id);
 
             if (deletedMaintenanceLog == null)
             {
