@@ -27,9 +27,11 @@ namespace API.Controllers
             "ProductionPlanner,QualityInspector," +
             "MaintenanceTechnician,Operator")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MachineReading>>> GetMachineReadings()
+        public async Task<ActionResult<IEnumerable<MachineReading>>> GetMachineReadings(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var machineReadings = await _machineReadingServices.GetMachineReadings();
+            var machineReadings = await _machineReadingServices.GetMachineReadings(pageNumber, pageSize);
 
             return Ok(machineReadings);
         }
@@ -51,22 +53,22 @@ namespace API.Controllers
             return Ok(machineReading);
         }
 
-        [Authorize(Roles =
-            "Admin,PlantManager,ProductionManager," +
-            "MaintenanceTechnician,Operator")]
-        [HttpPost]
-        public async Task<ActionResult<MachineReading>> PostMachineReading(
-            MachineReadingRequest machineReading)
-        {
-            var createdMachineReading =
-                await _machineReadingServices.CreateMachineReading(machineReading);
-            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Create", nameof(MachineReading), createdMachineReading.ReadingId);
+        // [Authorize(Roles =
+        //     "Admin,PlantManager,ProductionManager," +
+        //     "MaintenanceTechnician,Operator")]
+        // [HttpPost]
+        // public async Task<ActionResult<MachineReading>> PostMachineReading(
+        //     MachineReadingRequest machineReading)
+        // {
+        //     var createdMachineReading =
+        //         await _machineReadingServices.CreateMachineReading(machineReading);
+        //     _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Create", nameof(MachineReading), createdMachineReading.ReadingId);
 
-            return CreatedAtAction(
-                nameof(GetMachineReading),
-                new { id = createdMachineReading.ReadingId },
-                createdMachineReading);
-        }
+        //     return CreatedAtAction(
+        //         nameof(GetMachineReading),
+        //         new { id = createdMachineReading.ReadingId },
+        //         createdMachineReading);
+        // }
 
         [Authorize(Roles =
             "Admin,PlantManager,ProductionManager," +

@@ -125,6 +125,12 @@ namespace MachineUnitTests
                 return Task.FromResult<List<Machine>?>(Items);
             }
 
+            public Task<List<Machine>?> GetAll(int pageNumber, int pageSize)
+            {
+                var skip = (pageNumber - 1) * pageSize;
+                return Task.FromResult<List<Machine>?>(Items.Skip(skip).Take(pageSize).ToList());
+            }
+
             public Task<Machine?> GetByUserName(string userName)
             {
                 return Task.FromResult<Machine?>(null);

@@ -14,9 +14,9 @@ namespace BusinessLayer.Services
             _machineReadingRepository = machineReadingRepository;
         }
 
-        public async Task<List<MachineReading>?> GetMachineReadings()
+        public async Task<List<MachineReading>?> GetMachineReadings(int pageNumber = 1, int pageSize = 10)
         {
-            return await _machineReadingRepository.GetAll();
+            return await _machineReadingRepository.GetAll(pageNumber, pageSize);
         }
 
         public async Task<MachineReading?> GetMachineReading(int id)

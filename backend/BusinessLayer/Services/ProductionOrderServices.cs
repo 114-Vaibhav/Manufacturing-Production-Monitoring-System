@@ -14,9 +14,9 @@ namespace BusinessLayer.Services
             _productionOrderRepository = productionOrderRepository;
         }
 
-        public async Task<List<ProductionOrder>?> GetProductionOrder()
+        public async Task<List<ProductionOrder>?> GetProductionOrder(int pageNumber = 1, int pageSize = 10)
         {
-            return await _productionOrderRepository.GetAll();
+            return await _productionOrderRepository.GetAll(pageNumber, pageSize);
         }
 
         public async Task<ProductionOrder?> GetProductionOrder(int id)

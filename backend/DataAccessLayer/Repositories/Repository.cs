@@ -49,7 +49,25 @@ namespace DataAccessLayer.Repositories
 
         public async Task<List<T>?> GetAll()
         {
-            return (await _context.Set<T>().ToListAsync());
+            return await _context.Set<T>().ToListAsync();
+        }
+
+        public async Task<List<T>?> GetAll(int pageNumber, int pageSize)
+        {
+            if (pageNumber < 1)
+            {
+                pageNumber = 1;
+            }
+
+            if (pageSize < 1)
+            {
+                pageSize = 10;
+            }
+
+            return await _context.Set<T>()
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
         public async Task<T?> Update(K key, T item)

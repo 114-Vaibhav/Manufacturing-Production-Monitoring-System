@@ -26,9 +26,11 @@ namespace API.Controllers
         [HttpGet]
         [Authorize(Roles =
             "Admin,QualityInspector,ProductionManager,PlantManager")]
-        public async Task<ActionResult<IEnumerable<Defect>>> GetDefects()
+        public async Task<ActionResult<IEnumerable<Defect>>> GetDefects(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var defects = await _defectServices.GetDefects();
+            var defects = await _defectServices.GetDefects(pageNumber, pageSize);
 
             return Ok(defects);
         }

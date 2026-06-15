@@ -4,3 +4,7 @@ dotnet ef migrations add UpdatedModels \
   --project DataAccessLayer \
   --startup-project API
 
+
+dotnet ef database update \
+  --project DataAccessLayer \
+  --startup-project API

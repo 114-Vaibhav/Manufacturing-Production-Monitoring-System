@@ -16,6 +16,7 @@ public class MPMSDbContext : DbContext
     public DbSet<Machine> Machines { get; set; }
     public DbSet<MachineReading> MachineReadings { get; set; }
     public DbSet<MaintenanceLog> MaintenanceLogs { get; set; }
+    public DbSet<AuditLog> AuditLogs { get; set; }
     public DbSet<ProductionAnalytics> ProductionAnalytics { get; set; }
     public DbSet<ProductionOrder> ProductionOrders { get; set; }
     public DbSet<ProductionPlan> ProductionPlans { get; set; }

@@ -27,10 +27,11 @@ namespace API.Controllers
         "ProductionPlanner,QualityInspector," +
         "MaintenanceTechnician,Operator")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Machine>>> GetMachines()
+        public async Task<ActionResult<IEnumerable<Machine>>> GetMachines(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
-            // Console.WriteLine("Getting all machines...");
-            var machines = await _machineServices.GetMachines();
+            var machines = await _machineServices.GetMachines(pageNumber, pageSize);
 
             return Ok(machines);
         }

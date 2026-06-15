@@ -28,10 +28,12 @@ namespace API.Controllers
             "Admin,Operator,ProductionManager," +
             "ProductionPlanner,PlantManager")]
         public async Task<ActionResult<IEnumerable<ProductionOrder>>>
-            GetProductionOrders()
+            GetProductionOrders(
+                [FromQuery] int pageNumber = 1,
+                [FromQuery] int pageSize = 10)
         {
             var orders =
-                await _productionOrderServices.GetProductionOrder();
+                await _productionOrderServices.GetProductionOrder(pageNumber, pageSize);
 
             return Ok(orders);
         }

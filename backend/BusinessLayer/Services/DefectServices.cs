@@ -14,9 +14,9 @@ namespace BusinessLayer.Services
             _defectRepository = defectRepository;
         }
 
-        public async Task<List<Defect>?> GetDefects()
+        public async Task<List<Defect>?> GetDefects(int pageNumber = 1, int pageSize = 10)
         {
-            return await _defectRepository.GetAll();
+            return await _defectRepository.GetAll(pageNumber, pageSize);
         }
 
         public async Task<Defect?> GetDefect(int id)

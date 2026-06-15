@@ -27,9 +27,11 @@ namespace API.Controllers
             "Admin,PlantManager,MaintenanceTechnician," +
             "ProductionManager,QualityInspector,Operator")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MaintenanceLog>>> GetMaintenanceLogs()
+        public async Task<ActionResult<IEnumerable<MaintenanceLog>>> GetMaintenanceLogs(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var maintenanceLogs = await _maintenanceLogServices.GetMaintenanceLogs();
+            var maintenanceLogs = await _maintenanceLogServices.GetMaintenanceLogs(pageNumber, pageSize);
 
             return Ok(maintenanceLogs);
         }

@@ -14,9 +14,9 @@ namespace BusinessLayer.Services
             _productionPlanRepository = productionPlanRepository;
         }
 
-        public async Task<List<ProductionPlan>?> GetProductionPlan()
+        public async Task<List<ProductionPlan>?> GetProductionPlan(int pageNumber = 1, int pageSize = 10)
         {
-            return await _productionPlanRepository.GetAll();
+            return await _productionPlanRepository.GetAll(pageNumber, pageSize);
         }
 
         public async Task<ProductionPlan?> GetProductionPlan(int id)

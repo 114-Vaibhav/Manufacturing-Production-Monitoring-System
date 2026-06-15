@@ -14,9 +14,9 @@ namespace BusinessLayer.Services
             _productionRecordRepository = productionRecordRepository;
         }
 
-        public async Task<List<ProductionRecord>?> GetProductionRecord()
+        public async Task<List<ProductionRecord>?> GetProductionRecord(int pageNumber = 1, int pageSize = 10)
         {
-            return await _productionRecordRepository.GetAll();
+            return await _productionRecordRepository.GetAll(pageNumber, pageSize);
         }
 
         public async Task<ProductionRecord?> GetProductionRecord(int id)

@@ -6,4 +6,9 @@
   <Project Path="Tests/Defect.UnitTests/Defect.UnitTests.csproj" />
   <Project Path="Tests/Machine.UnitTests/Machine.UnitTests.csproj" />
   <Project Path="Tests/Product.UnitTests/Product.UnitTests.csproj" />
+  <Project Path="Tests/ProductionOrder.UnitTests/ProductionOrder.UnitTests.csproj" />
+  <Project Path="Tests/ProductionPlan.UnitTests/ProductionPlan.UnitTests.csproj" />
+  <Project Path="Tests/ProductionRecord.UnitTests/ProductionRecord.UnitTests.csproj" />
+  <Project Path="Tests/MaintenanceLog.UnitTests/MaintenanceLog.UnitTests.csproj" />
+  <Project Path="Tests/MachineReading.UnitTests/MachineReading.UnitTests.csproj" />
 </Solution>

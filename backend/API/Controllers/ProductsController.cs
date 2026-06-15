@@ -27,9 +27,11 @@ namespace API.Controllers
         [HttpGet]
         [Authorize(Roles =
             "Admin,Operator,ProductionManager,ProductionPlanner,PlantManager,QualityInspector")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var products = await _productServices.GetProducts();
+            var products = await _productServices.GetProducts(pageNumber, pageSize);
 
             return Ok(products);
         }

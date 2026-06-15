@@ -27,10 +27,12 @@ namespace API.Controllers
         [Authorize(Roles =
             "Admin,PlantManager,ProductionManager,ProductionPlanner")]
         public async Task<ActionResult<IEnumerable<ProductionPlan>>>
-            GetProductionPlans()
+            GetProductionPlans(
+                [FromQuery] int pageNumber = 1,
+                [FromQuery] int pageSize = 10)
         {
             var plans =
-                await _productionPlanServices.GetProductionPlan();
+                await _productionPlanServices.GetProductionPlan(pageNumber, pageSize);
 
             return Ok(plans);
         }

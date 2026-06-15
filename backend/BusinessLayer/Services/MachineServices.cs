@@ -14,9 +14,9 @@ namespace BusinessLayer.Services
             _machineRepository = machineRepository;
         }
 
-        public async Task<List<Machine>?> GetMachines()
+        public async Task<List<Machine>?> GetMachines(int pageNumber = 1, int pageSize = 10)
         {
-            return await _machineRepository.GetAll();
+            return await _machineRepository.GetAll(pageNumber, pageSize);
         }
 
         public async Task<Machine?> GetMachine(int id)

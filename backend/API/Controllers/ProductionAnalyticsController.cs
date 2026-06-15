@@ -25,10 +25,12 @@ namespace API.Controllers
             "ProductionPlanner,PlantManager," +
             "QualityInspector,MaintenanceTechnician")]
         public async Task<ActionResult<IEnumerable<ProductionAnalytics>>>
-            GetProductionAnalytics()
+            GetProductionAnalytics(
+                [FromQuery] int pageNumber = 1,
+                [FromQuery] int pageSize = 10)
         {
             var analytics =
-                await _productionAnalyticsServices.GetProductionAnalytics();
+                await _productionAnalyticsServices.GetProductionAnalytics(pageNumber, pageSize);
 
             return Ok(analytics);
         }

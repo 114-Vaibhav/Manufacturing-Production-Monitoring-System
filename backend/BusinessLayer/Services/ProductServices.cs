@@ -14,9 +14,9 @@ namespace BusinessLayer.Services
             _productRepository = productRepository;
         }
 
-        public async Task<List<Product>?> GetProducts()
+        public async Task<List<Product>?> GetProducts(int pageNumber = 1, int pageSize = 10)
         {
-            return await _productRepository.GetAll();
+            return await _productRepository.GetAll(pageNumber, pageSize);
         }
 
         public async Task<Product?> GetProduct(int id)

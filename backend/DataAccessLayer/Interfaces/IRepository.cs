@@ -7,6 +7,7 @@ namespace DataAccessLayer.Interfaces
         public Task<T> Create(T item);
         public Task<T?> Get(K key);
         public Task<List<T>?> GetAll();
+        public Task<List<T>?> GetAll(int pageNumber, int pageSize);
         public Task<T?> GetByUserName(string userName);
         public Task<T?> Update(K key,T item);
         public Task<T?> Delete(K key);

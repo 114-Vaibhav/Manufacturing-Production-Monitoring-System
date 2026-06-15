@@ -1,0 +1,1158 @@
+{
+  "info": {
+    "_postman_id": "62f4fdc7-713f-4e8f-9b60-22f7e9de1d58",
+    "name": "MPMS API Copy",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55043271",
+    "_collection_link": "https://go.postman.co/collection/55043271-62f4fdc7-713f-4e8f-9b60-22f7e9de1d58?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "user-register",
+      "item": [
+        {
+          "name": "POST - /user-register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.execution.setNextRequest(\"POST - /user-login\");"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"test_admin\",\n  \"fullName\": \"Vaibhav Gupta\",\n  \"email\": \"vaibhav@factory.com\",\n  \"password\": \"SecurePassword123!\",\n  \"role\": 0\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user-register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user-register"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "user-login",
+      "item": [
+        {
+          "name": "POST - /user-login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const responseData = pm.response.json();",
+                  "if (responseData && responseData.token) {",
+                  "    pm.collectionVariables.set(\"jwt_token\", responseData.token);",
+                  "}",
+                  "pm.execution.setNextRequest(\"POST - /api/Products\");"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"test_admin\",\n  \"password\": \"SecurePassword123!\",\n  \"role\": 0,\n  \"machineId\": 1,\n  \"locationId\": 1\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user-login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user-login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "Products",
+          "item": [
+            {
+              "name": "POST - /api/Products",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const response = pm.response.json();",
+                      "if (response && response.productId) {",
+                      "    pm.collectionVariables.set(\"current_product_id\", response.productId);",
+                      "}",
+                      "pm.execution.setNextRequest(\"GET - /api/Products\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"productName\": \"Automotive Microcontroller\",\n  \"productCode\": \"MCU-P01\",\n  \"description\": \"High performance powertrain controller unit\",\n  \"unitPrice\": 45.5,\n  \"status\": \"Active\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/Products",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Products"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET - /api/Products",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.execution.setNextRequest(\"POST - /api/Machines\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Products",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Products"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Machines",
+          "item": [
+            {
+              "name": "POST - /api/Machines",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "var locationHeader = pm.response.headers.get(\"Location\");",
+                      "if (locationHeader) {",
+                      "    var id = locationHeader.split('/').pop();",
+                      "    pm.collectionVariables.set(\"current_machine_id\", id);",
+                      "} else {",
+                      "    const response = pm.response.json();",
+                      "    if (response && response.machineId) {",
+                      "        pm.collectionVariables.set(\"current_machine_id\", response.machineId);",
+                      "    }",
+                      "}",
+                      "pm.execution.setNextRequest(\"GET - /api/Machines\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"machineName\": \"SMT Assembly Robot A\",\n  \"machineCode\": \"ROB-SMT-01\",\n  \"locationId\": 1,\n  \"status\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/Machines",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Machines"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET - /api/Machines",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.execution.setNextRequest(\"GET - /api/Machines/:id\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Machines",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Machines"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET - /api/Machines/:id",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.execution.setNextRequest(\"POST - /api/ProductionPlans\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Machines/{{current_machine_id}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Machines",
+                    "{{current_machine_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "ProductionPlans",
+          "item": [
+            {
+              "name": "POST - /api/ProductionPlans",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const response = pm.response.json();",
+                      "if (response && response.planId) {",
+                      "    pm.collectionVariables.set(\"current_plan_id\", response.planId);",
+                      "}",
+                      "pm.execution.setNextRequest(\"GET - /api/ProductionPlans\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"productName\": \"Automotive Microcontroller\",\n  \"targetQuantity\": 5000,\n  \"startDate\": \"2026-06-15T06:00:00Z\",\n  \"endDate\": \"2026-06-25T18:00:00Z\",\n  \"status\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/ProductionPlans",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ProductionPlans"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET - /api/ProductionPlans",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.execution.setNextRequest(\"POST - /api/ProductionOrders\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ProductionPlans",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ProductionPlans"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "ProductionOrders",
+          "item": [
+            {
+              "name": "POST - /api/ProductionOrders",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const response = pm.response.json();",
+                      "if (response && response.orderId) {",
+                      "    pm.collectionVariables.set(\"current_order_id\", response.orderId);",
+                      "}",
+                      "pm.execution.setNextRequest(\"GET - /api/ProductionOrders\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"planId\": 1,\n  \"machineId\": 1,\n  \"quantity\": 2500,\n  \"status\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/ProductionOrders",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ProductionOrders"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET - /api/ProductionOrders",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.execution.setNextRequest(\"POST - /api/ProductionRecords\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ProductionOrders",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ProductionOrders"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "ProductionRecords",
+          "item": [
+            {
+              "name": "POST - /api/ProductionRecords",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.execution.setNextRequest(\"GET - /api/ProductionRecords\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"productionPlanId\": 1,\n  \"producedQuantity\": 250\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/ProductionRecords",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ProductionRecords"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET - /api/ProductionRecords",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.execution.setNextRequest(\"POST - /api/MachineReadings\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ProductionRecords",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ProductionRecords"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "MachineReadings",
+          "item": [
+            {
+              "name": "POST - /api/MachineReadings",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "var locationHeader = pm.response.headers.get(\"Location\");",
+                      "if (locationHeader) {",
+                      "    var id = locationHeader.split('/').pop();",
+                      "    pm.collectionVariables.set(\"current_reading_id\", id);",
+                      "} else {",
+                      "    const response = pm.response.json();",
+                      "    if (response && response.readingId) {",
+                      "        pm.collectionVariables.set(\"current_reading_id\", response.readingId);",
+                      "    }",
+                      "}",
+                      "pm.execution.setNextRequest(\"GET - /api/MachineReadings\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"machineId\": 1,\n  \"temperature\": 72.4,\n  \"vibration\": 0.04,\n  \"powerConsumption\": 3.1\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/MachineReadings",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "MachineReadings"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET - /api/MachineReadings",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.collectionVariables.get(\"current_reading_id\")) {",
+                      "    pm.execution.setNextRequest(\"GET - /api/MachineReadings/:id\");",
+                      "} else {",
+                      "    pm.execution.setNextRequest(\"POST - /api/MaintenanceLogs\");",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/MachineReadings",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "MachineReadings"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET - /api/MachineReadings/:id",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.execution.setNextRequest(\"POST - /api/MaintenanceLogs\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/MachineReadings/{{current_reading_id}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "MachineReadings",
+                    "{{current_reading_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "MaintenanceLogs",
+          "item": [
+            {
+              "name": "POST - /api/MaintenanceLogs",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.execution.setNextRequest(\"GET - /api/MaintenanceLogs\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"machineId\": 1,\n  \"engineerId\": 1,\n  \"issueDescription\": \"Axis alignment threshold deviation alert triggered.\",\n  \"resolution\": \"Realigned optical placement lens modules and calibrated sensors.\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/MaintenanceLogs",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "MaintenanceLogs"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET - /api/MaintenanceLogs",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.execution.setNextRequest(\"GET - /api/ProductionAnalytics\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/MaintenanceLogs",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "MaintenanceLogs"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "ProductionAnalytics",
+          "item": [
+            {
+              "name": "GET - /api/ProductionAnalytics",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.execution.setNextRequest(\"POST - /api/Defects\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ProductionAnalytics",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ProductionAnalytics"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Defects",
+          "item": [
+            {
+              "name": "POST - /api/Defects",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "var locationHeader = pm.response.headers.get(\"Location\");",
+                      "if (locationHeader) {",
+                      "    var id = locationHeader.split('/').pop();",
+                      "    pm.collectionVariables.set(\"current_defect_id\", id);",
+                      "} else {",
+                      "    const response = pm.response.json();",
+                      "    if (response && response.defectId) {",
+                      "        pm.collectionVariables.set(\"current_defect_id\", response.defectId);",
+                      "    }",
+                      "}",
+                      "pm.execution.setNextRequest(\"GET - /api/Defects\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orderId\": 1,\n  \"machineId\": 1,\n  \"type\": 3,\n  \"severity\": 1,\n  \"description\": \"Solder joint separation detected on PCB sector B.\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/Defects",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Defects"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET - /api/Defects",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.execution.setNextRequest(\"GET - /api/Defects/:id\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Defects",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Defects"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET - /api/Defects/:id",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.execution.setNextRequest(\"PUT - /api/Defects/:id\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Defects/{{current_defect_id}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Defects",
+                    "{{current_defect_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "PUT - /api/Defects/:id",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.execution.setNextRequest(\"DELETE - /api/Defects/:id\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orderId\": 1,\n  \"machineId\": 1,\n  \"type\": 3,\n  \"severity\": 1,\n  \"description\": \"Solder joint separation detected on PCB sector B. - UPDATED\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/Defects/{{current_defect_id}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Defects",
+                    "{{current_defect_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "DELETE - /api/Defects/:id",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.execution.setNextRequest(null);",
+                      "console.log(\"MPMS Suite Run Completed Successfully!\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/Defects/{{current_defect_id}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Defects",
+                    "{{current_defect_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdF9hZG1pbiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzgxMjY0OTUyLCJpc3MiOiJHMyBTZXJ2ZXIifQ.X-cnplaleqsw8ORAdv7himI-HKtnRkOWO-_JvwhYWnM",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5098"
+    },
+    {
+      "key": "jwt_token",
+      "value": ""
+    },
+    {
+      "key": "current_product_id",
+      "value": ""
+    },
+    {
+      "key": "current_machine_id",
+      "value": ""
+    },
+    {
+      "key": "current_plan_id",
+      "value": ""
+    },
+    {
+      "key": "current_order_id",
+      "value": ""
+    },
+    {
+      "key": "current_reading_id",
+      "value": ""
+    },
+    {
+      "key": "current_defect_id",
+      "value": ""
+    }
+  ]
+}

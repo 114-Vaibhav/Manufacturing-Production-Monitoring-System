@@ -20,10 +20,22 @@ namespace BusinessLayer.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<ProductionAnalytics>> GetProductionAnalytics()
+        public async Task<IEnumerable<ProductionAnalytics>> GetProductionAnalytics(int pageNumber = 1, int pageSize = 10)
         {
-            // Now you can safely use _context here!
-            return await _context.ProductionAnalytics.ToListAsync();
+            if (pageNumber < 1)
+            {
+                pageNumber = 1;
+            }
+
+            if (pageSize < 1)
+            {
+                pageSize = 10;
+            }
+
+            return await _context.ProductionAnalytics
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
         public async Task UpdateProductionAnalyticsInternalAsync()

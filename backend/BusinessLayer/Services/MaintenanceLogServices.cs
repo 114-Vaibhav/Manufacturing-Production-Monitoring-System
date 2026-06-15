@@ -14,9 +14,9 @@ namespace BusinessLayer.Services
             _maintenanceLogRepository = maintenanceLogRepository;
         }
 
-        public async Task<List<MaintenanceLog>?> GetMaintenanceLogs()
+        public async Task<List<MaintenanceLog>?> GetMaintenanceLogs(int pageNumber = 1, int pageSize = 10)
         {
-            return await _maintenanceLogRepository.GetAll();
+            return await _maintenanceLogRepository.GetAll(pageNumber, pageSize);
         }
 
         public async Task<MaintenanceLog?> GetMaintenanceLog(int id)

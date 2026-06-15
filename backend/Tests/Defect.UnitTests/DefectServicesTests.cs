@@ -132,6 +132,12 @@ namespace DefectUnitTests
                 return Task.FromResult<List<Defect>?>(Items);
             }
 
+            public Task<List<Defect>?> GetAll(int pageNumber, int pageSize)
+            {
+                var skip = (pageNumber - 1) * pageSize;
+                return Task.FromResult<List<Defect>?>(Items.Skip(skip).Take(pageSize).ToList());
+            }
+
             public Task<Defect?> GetByUserName(string userName)
             {
                 return Task.FromResult<Defect?>(null);

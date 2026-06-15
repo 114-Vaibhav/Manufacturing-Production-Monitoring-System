@@ -12,7 +12,7 @@ namespace BusinessLayer.Interfaces
 {
     public interface IProductionAnalyticsServices
     {
-        Task<IEnumerable<ProductionAnalytics>> GetProductionAnalytics();
+        Task<IEnumerable<ProductionAnalytics>> GetProductionAnalytics(int pageNumber = 1, int pageSize = 10);
         
         // This is the new internal method your background worker calls
         Task UpdateProductionAnalyticsInternalAsync();

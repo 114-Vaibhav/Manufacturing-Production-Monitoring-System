@@ -129,6 +129,12 @@ namespace ProductUnitTests
                 return Task.FromResult<List<Product>?>(Items);
             }
 
+            public Task<List<Product>?> GetAll(int pageNumber, int pageSize)
+            {
+                var skip = (pageNumber - 1) * pageSize;
+                return Task.FromResult<List<Product>?>(Items.Skip(skip).Take(pageSize).ToList());
+            }
+
             public Task<Product?> GetByUserName(string userName)
             {
                 return Task.FromResult<Product?>(null);

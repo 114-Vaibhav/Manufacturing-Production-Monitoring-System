@@ -29,10 +29,12 @@ namespace API.Controllers
             "ProductionPlanner,PlantManager," +
             "QualityInspector")]
         public async Task<ActionResult<IEnumerable<ProductionRecord>>>
-            GetProductionRecords()
+            GetProductionRecords(
+                [FromQuery] int pageNumber = 1,
+                [FromQuery] int pageSize = 10)
         {
             var records =
-                await _productionRecordServices.GetProductionRecord();
+                await _productionRecordServices.GetProductionRecord(pageNumber, pageSize);
 
             return Ok(records);
         }
