@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "b1LJ73id5Jc=",
+  "dgSpecHash": "AP90huy13kM=",
   "success": true,
-  "projectFilePath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Tests/Product.UnitTests/Product.UnitTests.csproj",
+  "projectFilePath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Tests/Product.UnitTests/Product.UnitTests.csproj",
   "expectedPackageFiles": [
     "/Users/vaibhavgupta/.nuget/packages/microsoft.bcl.cryptography/10.0.2/microsoft.bcl.cryptography.10.0.2.nupkg.sha512",
     "/Users/vaibhavgupta/.nuget/packages/microsoft.codecoverage/17.14.1/microsoft.codecoverage.17.14.1.nupkg.sha512",

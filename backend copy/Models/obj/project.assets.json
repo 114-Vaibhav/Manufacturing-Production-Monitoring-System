@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Models/Models.csproj",
+      "projectUniqueName": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Models/Models.csproj",
       "projectName": "Models",
-      "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Models/Models.csproj",
+      "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Models/Models.csproj",
       "packagesPath": "/Users/vaibhavgupta/.nuget/packages/",
-      "outputPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Models/obj/",
+      "outputPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Models/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/vaibhavgupta/.nuget/NuGet/NuGet.Config"

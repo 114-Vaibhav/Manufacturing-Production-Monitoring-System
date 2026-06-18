@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Tests/Product.UnitTests/Product.UnitTests.csproj": {}
+    "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Tests/Product.UnitTests/Product.UnitTests.csproj": {}
   },
   "projects": {
-    "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/BusinessLayer/BusinessLayer.csproj": {
+    "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/BusinessLayer/BusinessLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/BusinessLayer/BusinessLayer.csproj",
+        "projectUniqueName": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/BusinessLayer/BusinessLayer.csproj",
         "projectName": "BusinessLayer",
-        "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/BusinessLayer/BusinessLayer.csproj",
+        "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/BusinessLayer/BusinessLayer.csproj",
         "packagesPath": "/Users/vaibhavgupta/.nuget/packages/",
-        "outputPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/BusinessLayer/obj/",
+        "outputPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/BusinessLayer/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/vaibhavgupta/.nuget/NuGet/NuGet.Config"
@@ -26,11 +26,11 @@
           "net10.0": {
             "targetAlias": "net10.0",
             "projectReferences": {
-              "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/DataAccessLayer/DataAccessLayer.csproj": {
-                "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/DataAccessLayer/DataAccessLayer.csproj"
+              "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/DataAccessLayer/DataAccessLayer.csproj": {
+                "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/DataAccessLayer/DataAccessLayer.csproj"
               },
-              "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Models/Models.csproj": {
-                "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Models/Models.csproj"
+              "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Models/Models.csproj": {
+                "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Models/Models.csproj"
               }
             }
           }
@@ -358,14 +358,14 @@
         }
       }
     },
-    "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/DataAccessLayer/DataAccessLayer.csproj": {
+    "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/DataAccessLayer/DataAccessLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/DataAccessLayer/DataAccessLayer.csproj",
+        "projectUniqueName": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/DataAccessLayer/DataAccessLayer.csproj",
         "projectName": "DataAccessLayer",
-        "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/DataAccessLayer/DataAccessLayer.csproj",
+        "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/DataAccessLayer/DataAccessLayer.csproj",
         "packagesPath": "/Users/vaibhavgupta/.nuget/packages/",
-        "outputPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/DataAccessLayer/obj/",
+        "outputPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/DataAccessLayer/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/vaibhavgupta/.nuget/NuGet/NuGet.Config"
@@ -380,8 +380,8 @@
           "net10.0": {
             "targetAlias": "net10.0",
             "projectReferences": {
-              "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Models/Models.csproj": {
-                "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Models/Models.csproj"
+              "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Models/Models.csproj": {
+                "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Models/Models.csproj"
               }
             }
           }
@@ -711,14 +711,14 @@
         }
       }
     },
-    "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Models/Models.csproj": {
+    "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Models/Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Models/Models.csproj",
+        "projectUniqueName": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Models/Models.csproj",
         "projectName": "Models",
-        "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Models/Models.csproj",
+        "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Models/Models.csproj",
         "packagesPath": "/Users/vaibhavgupta/.nuget/packages/",
-        "outputPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Models/obj/",
+        "outputPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Models/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/vaibhavgupta/.nuget/NuGet/NuGet.Config"
@@ -1044,14 +1044,14 @@
         }
       }
     },
-    "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Tests/Product.UnitTests/Product.UnitTests.csproj": {
+    "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Tests/Product.UnitTests/Product.UnitTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Tests/Product.UnitTests/Product.UnitTests.csproj",
+        "projectUniqueName": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Tests/Product.UnitTests/Product.UnitTests.csproj",
         "projectName": "Product.UnitTests",
-        "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Tests/Product.UnitTests/Product.UnitTests.csproj",
+        "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Tests/Product.UnitTests/Product.UnitTests.csproj",
         "packagesPath": "/Users/vaibhavgupta/.nuget/packages/",
-        "outputPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Tests/Product.UnitTests/obj/",
+        "outputPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Tests/Product.UnitTests/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/vaibhavgupta/.nuget/NuGet/NuGet.Config"
@@ -1066,14 +1066,14 @@
           "net10.0": {
             "targetAlias": "net10.0",
             "projectReferences": {
-              "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/BusinessLayer/BusinessLayer.csproj": {
-                "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/BusinessLayer/BusinessLayer.csproj"
+              "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/BusinessLayer/BusinessLayer.csproj": {
+                "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/BusinessLayer/BusinessLayer.csproj"
               },
-              "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/DataAccessLayer/DataAccessLayer.csproj": {
-                "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/DataAccessLayer/DataAccessLayer.csproj"
+              "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/DataAccessLayer/DataAccessLayer.csproj": {
+                "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/DataAccessLayer/DataAccessLayer.csproj"
               },
-              "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Models/Models.csproj": {
-                "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend/Models/Models.csproj"
+              "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Models/Models.csproj": {
+                "projectPath": "/Users/vaibhavgupta/Desktop/CapstoneProject/backend copy/Models/Models.csproj"
               }
             }
           }
