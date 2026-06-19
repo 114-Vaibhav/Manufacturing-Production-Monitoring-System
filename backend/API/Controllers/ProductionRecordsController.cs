@@ -68,7 +68,7 @@ namespace API.Controllers
                 await _productionRecordServices
                     .CreateProductionRecord(productionRecord);
             _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Create", nameof(ProductionRecord), createdRecord.Id);
-
+            Console.WriteLine("Created record");
             return CreatedAtAction(
                 nameof(GetProductionRecord),
                 new { id = createdRecord.Id },

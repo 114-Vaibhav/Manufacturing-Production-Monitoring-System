@@ -18,11 +18,11 @@ public static class MaintenanceLogValidator
             errors.Add("MachineId must be greater than 0.");
         }
 
-        // EngineerId validation
-        if (maintenanceLog.EngineerId <= 0)
-        {
-            errors.Add("EngineerId must be greater than 0.");
-        }
+        // // EngineerId validation
+        // if (maintenanceLog.EngineerId <= 0)
+        // {
+        //     errors.Add("EngineerId must be greater than 0.");
+        // }
 
         // IssueDescription validation
         if (string.IsNullOrWhiteSpace(maintenanceLog.IssueDescription))

@@ -1,6 +1,0 @@
-For Migrations: run it from root backend
-
-dotnet ef migrations add UpdatedModels \
-  --project DataAccessLayer \
-  --startup-project API
-

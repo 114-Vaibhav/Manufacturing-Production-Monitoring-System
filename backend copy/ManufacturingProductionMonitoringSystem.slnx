@@ -1,9 +1,0 @@
-<Solution>
-  <Project Path="API/API.csproj" />
-  <Project Path="BusinessLayer/BusinessLayer.csproj" />
-  <Project Path="DataAccessLayer/DataAccessLayer.csproj" />
-  <Project Path="Models/Models.csproj" />
-  <Project Path="Tests/Defect.UnitTests/Defect.UnitTests.csproj" />
-  <Project Path="Tests/Machine.UnitTests/Machine.UnitTests.csproj" />
-  <Project Path="Tests/Product.UnitTests/Product.UnitTests.csproj" />
-</Solution>

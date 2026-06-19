@@ -57,6 +57,7 @@ namespace BusinessLayer.Services
 
         private static ProductionRecord MapProductionRecord(ProductionRecordRequest request)
         {
+            Console.WriteLine("Mapping production record");
             return new ProductionRecord
             {
                 ProductionPlanId = request.ProductionPlanId,

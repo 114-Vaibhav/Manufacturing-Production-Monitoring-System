@@ -1,1 +1,17 @@
-<app-login></app-login>
+<div class="flex">
+
+  <app-sidebar></app-sidebar>
+
+  <div class="flex-1">
+
+    <app-navbar></app-navbar>
+
+    <main class="bg-slate-100 min-h-screen p-6">
+        <app-login></app-login>      
+        <router-outlet></router-outlet>
+
+    </main>
+    <app-footer></app-footer>
+  </div>
+
+</div>

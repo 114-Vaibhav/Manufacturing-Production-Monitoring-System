@@ -44,6 +44,10 @@ public static class ProductionOrderValidator
 
         if (errors.Any())
         {
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.WriteLine("Validation Errors:");
+            Console.WriteLine(string.Join("\n", errors));
+            Console.ResetColor();
             throw new ValidationException(errors);
         }
     }
