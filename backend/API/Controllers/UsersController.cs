@@ -72,9 +72,15 @@ namespace API.Controllers
         [HttpPost("/user-login")]
         public async Task<ActionResult<LoginResponse>> LoginUser(LoginRequest user)
         {
+            Console.WriteLine($"User {user.UserName} logging in.");
+                Console.WriteLine($"User {user.Role} logging in.");
             try
             {   
+                Console.WriteLine($"User {user.UserName} logging in.");
+                Console.WriteLine($"User {user.Role} logging in.");
+
                 var loggedInUser = await _userServices.LoginUser(user);
+                
                 return Ok(loggedInUser);
             }
             catch (Exception ex)
@@ -82,6 +88,20 @@ namespace API.Controllers
                 return BadRequest(ex.Message);
             }
          }     
-  
+
+        [HttpPost("/update-password")]
+        public async Task<ActionResult<LoginResponse>> UpdatePassword(UpdatePasswordRequest request)
+        {
+            try
+            {   
+                var loggedInUser = await _userServices.UpdatePassword(request);
+                return Ok(loggedInUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+         }
+
     }
 }

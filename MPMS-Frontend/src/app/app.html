@@ -1,17 +1,19 @@
-<div class="flex">
+<div class="min-h-screen flex flex-col bg-gray-100">
 
-  <app-sidebar></app-sidebar>
+  <app-navbar></app-navbar>
 
-  <div class="flex-1">
+  <div class="flex flex-1 overflow-hidden">
 
-    <app-navbar></app-navbar>
+    <app-sidebar *ngIf="currentUser()" class="w-64 bg-slate-900 border-r border-slate-700"></app-sidebar>
 
-    <main class="bg-slate-100 min-h-screen p-6">
-        <app-login></app-login>      
-        <router-outlet></router-outlet>
+    <main class="flex-1 overflow-y-auto bg-gray-50">
+
+      <router-outlet></router-outlet>
 
     </main>
-    <app-footer></app-footer>
+
   </div>
+
+  <app-footer></app-footer>
 
 </div>

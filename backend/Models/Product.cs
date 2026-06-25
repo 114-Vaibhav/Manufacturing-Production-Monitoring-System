@@ -3,12 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace backend.Models
 {
-    public enum ProductStatus
-    {
-        Active,
-        Discontinued,
-        OutOfStock
-    }
+
     public class Product
     {
         [Key]

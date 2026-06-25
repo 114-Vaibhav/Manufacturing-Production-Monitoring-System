@@ -1,9 +1,9 @@
 [
   {
-    "userName": "admin",
+    "userName": "test_admin",
     "fullName": "admin",
     "email": "admin@vsg.com",
-    "password": "admin1234",
+    "password": "SecurePassword123!",
     "role": 0
   },
   {

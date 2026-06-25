@@ -105,7 +105,7 @@ if (app.Environment.IsDevelopment())
 // Global Exception Middleware
 app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseCors();
 

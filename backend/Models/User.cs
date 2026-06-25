@@ -5,23 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
 {
-    public enum UserRole
-    {
-        Admin,
-        Operator,
-        ProductionManager,
-        QualityInspector,
-        MaintenanceTechnician,
-        ProductionPlanner,
-        PlantManager
 
-    }
-    public enum UserStatus
-    {
-        Active,
-        Inactive,
-        Suspended
-    }
     public class User
     {
         [Key]

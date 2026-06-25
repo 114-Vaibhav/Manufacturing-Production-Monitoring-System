@@ -14,7 +14,7 @@ namespace API.BackgroundServices
         private readonly ILogger<ProductionAnalyticsWorker> _logger;
         
         // Adjust this interval as needed (e.g., every 5 minutes)
-        private readonly TimeSpan _executionInterval = TimeSpan.FromMinutes(5);
+        private readonly TimeSpan _executionInterval = TimeSpan.FromMinutes(1440);
 
         public ProductionAnalyticsWorker(
             IServiceProvider serviceProvider, 

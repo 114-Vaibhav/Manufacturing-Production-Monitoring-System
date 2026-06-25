@@ -9,17 +9,20 @@
 // export class Navbar {}
 
 import { Component } from '@angular/core';
+import { inject } from '@angular/core';
+import { AuthApiService } from '../../services/auth.services';
+
 
 @Component({
   selector: 'app-navbar',
   
   templateUrl: './navbar.html'
 })
-export class NavbarComponent {
+export class Navbar {
 
-  currentUser = {
-    name: 'Vaibhav Gupta',
-    role: 'Plant Manager'
-  };
+  private authService = inject(AuthApiService);
+
+  // Expose the signal to the template
+  currentUser = this.authService.currentUser;
 
 }

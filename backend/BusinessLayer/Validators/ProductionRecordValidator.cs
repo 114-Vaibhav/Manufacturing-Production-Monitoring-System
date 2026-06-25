@@ -12,10 +12,10 @@ public static class ProductionRecordValidator
 
         List<string> errors = new();
 
-        // if (record.ProductionPlanId <= 0)
-        // {
-        //     errors.Add("ProductionPlanId is required.");
-        // }
+        if (record.ProductionPlanId <= 0)
+        {
+            errors.Add("ProductionPlanId is required.");
+        }
 
         if (record.ProducedQuantity <= 0)
         {

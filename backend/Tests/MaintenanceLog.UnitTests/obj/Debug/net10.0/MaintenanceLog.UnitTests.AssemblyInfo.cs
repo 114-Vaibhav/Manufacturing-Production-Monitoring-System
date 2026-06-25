@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MaintenanceLog.UnitTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+28b23a424de6acf47cdeaa82bc53e46dd8b73bc7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6775b49c0e0e22d018385976ad92bb4911c0df39")]
 [assembly: System.Reflection.AssemblyProductAttribute("MaintenanceLog.UnitTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MaintenanceLog.UnitTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

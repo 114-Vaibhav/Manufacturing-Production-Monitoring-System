@@ -1,11 +1,6 @@
 namespace backend.Models
 {
-    public enum LocationStatus
-    {
-        Active,
-        Inactive,
-        UnderMaintenance
-    }
+
     public class Location
     {
         public int LocationId { get; set; }

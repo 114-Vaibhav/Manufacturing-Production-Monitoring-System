@@ -4,14 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace backend.Models
 {
-    public enum ProductionPlanStatus
-    {
-        Planned,
-        InProgress,
-        Completed,
-        OnHold,
-        Cancelled
-    }
+
     public class ProductionPlan
     {
         [Key]

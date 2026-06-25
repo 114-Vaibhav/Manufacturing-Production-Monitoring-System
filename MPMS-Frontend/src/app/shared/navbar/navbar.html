@@ -1,16 +1,10 @@
-<nav
-  class="h-16 bg-slate-900 border-b border-slate-700 flex items-center justify-between px-6 shadow-md">
+<nav class="h-16 bg-slate-900 border-b border-slate-700 flex items-center justify-between px-6 shadow-md">
 
   <!-- Left -->
   <div class="flex items-center gap-4">
 
-    <div
-      class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-white font-bold">
-      <img
-        src="/logo1.png"
-        alt="VSG Logo"
-        class="mx-auto h-40 w-auto object-contain"
-      >
+    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-white font-bold">
+      <img src="/logo1.png" alt="VSG Logo" class="mx-auto h-40 w-auto object-contain">
     </div>
 
     <div>
@@ -27,9 +21,7 @@
 
   <!-- Center -->
   <div class="hidden md:flex">
-    <input
-      type="text"
-      placeholder="Search..."
+    <input type="text" placeholder="Search..."
       class="bg-slate-800 text-white border border-slate-700 rounded-lg px-4 py-2 w-80 focus:outline-none focus:border-cyan-500">
   </div>
 
@@ -37,35 +29,29 @@
   <div class="flex items-center gap-6">
 
     <button class="relative text-slate-300 hover:text-white">
-
       🔔
-
-      <span
-        class="absolute -top-1 -right-2 bg-red-500 text-white text-[10px] rounded-full px-1">
+      <span class="absolute -top-1 -right-2 bg-red-500 text-white text-[10px] rounded-full px-1">
         3
       </span>
-
     </button>
 
-    <div class="flex items-center gap-3">
-
+    <a routerLink="/profile"
+      class="flex items-center gap-3 cursor-pointer hover:bg-slate-800 p-2 rounded-lg transition-colors duration-200">
       <div
-        class="w-10 h-10 rounded-full bg-cyan-500 flex items-center justify-center text-white font-semibold">
-        VG
+        class="w-10 h-10 rounded-full bg-cyan-500 flex items-center justify-center text-white font-semibold uppercase">
+        {{ currentUser() ? currentUser()?.fullName?.charAt(0) : 'U' }}
       </div>
 
       <div>
         <p class="text-white text-sm">
-          {{ currentUser.name }}
+          {{ currentUser()?.fullName || 'Guest' }}
         </p>
 
         <p class="text-slate-400 text-xs">
-          {{ currentUser.role }}
+          {{ currentUser()?.role || 'No Role' }}
         </p>
       </div>
-
-    </div>
+    </a>
 
   </div>
-
 </nav>

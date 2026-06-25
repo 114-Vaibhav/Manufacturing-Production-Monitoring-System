@@ -1,0 +1,124 @@
+<!-- We unwrap the signal using 'as user' so we can reference its properties cleanly -->
+<div class="min-h-screen bg-gray-100 p-6" *ngIf="currentUser() as user; else noUser">
+  <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <!-- LEFT COLUMN: Profile Details -->
+    <div class="col-span-1 bg-white rounded-2xl shadow-md p-6 h-fit border border-gray-200">
+      <div class="flex flex-col items-center">
+        <!-- Dummy Emoji Avatar -->
+        <div
+          class="w-24 h-24 rounded-full bg-slate-100 flex items-center justify-center text-5xl mb-4 shadow-inner border-2 border-slate-200">
+          👨‍💻
+        </div>
+
+        <h2 class="text-xl font-bold text-gray-900">{{ user.fullName }}</h2>
+        <p class="text-sm text-gray-500 mb-4">&#64;{{ user.username }}</p>
+
+        <span
+          [ngClass]="user.status === UserStatusEnum.Active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+          class="px-3 py-1 rounded-full text-xs font-semibold mb-6 inline-block">
+          {{ user.status | enumToString: UserStatusEnum }}
+        </span>
+      </div>
+
+      <div class="space-y-4 w-full border-t border-gray-100 pt-4">
+        <div>
+          <p class="text-xs text-gray-500 font-semibold uppercase">Email</p>
+          <p class="text-sm text-gray-800 font-medium">{{ user.email }}</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 font-semibold uppercase">Role</p>
+          <p class="text-sm text-gray-800 font-medium">{{ user.role | enumToString: UserRoleEnum }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: Password Change Form -->
+    <div class="col-span-1 lg:col-span-2 bg-white rounded-2xl shadow-md p-6 border border-gray-200">
+      <h3 class="text-lg font-bold text-gray-900 border-b border-gray-100 pb-3 mb-6">
+        Change Password
+      </h3>
+
+      <!-- Success Message Banner -->
+      <div *ngIf="successMessage"
+        class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg flex items-center gap-2 text-sm font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        {{ successMessage }}
+      </div>
+
+      <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPasswordChange()" class="space-y-5">
+
+        <!-- Previous Password -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Previous Password</label>
+          <input type="password" formControlName="previousPassword" placeholder="Enter current password"
+            class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-100': passwordForm.get('previousPassword')?.invalid && passwordForm.get('previousPassword')?.touched}">
+          <div *ngIf="passwordForm.get('previousPassword')?.invalid && passwordForm.get('previousPassword')?.touched"
+            class="text-red-500 text-xs mt-1">
+            Previous password is required.
+          </div>
+        </div>
+
+        <!-- New Password -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">New Password</label>
+          <input type="password" formControlName="newPassword" placeholder="Enter new password (min 8 characters)"
+            class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-100': passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched}">
+          <div *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched"
+            class="text-red-500 text-xs mt-1">
+            <span *ngIf="passwordForm.get('newPassword')?.errors?.['required']">New password is required.</span>
+            <span *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']">Password must be at least 8
+              characters.</span>
+          </div>
+          <div
+            *ngIf="passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.hasError('passwordSame')"
+            class="text-red-500 text-xs mt-1">
+            New password cannot be the same as the current password.
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Confirm New Password</label>
+          <input type="password" formControlName="confirmPassword" placeholder="Confirm new password"
+            class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-100': passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched}">
+          <div *ngIf="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched"
+            class="text-red-500 text-xs mt-1">
+            <span *ngIf="passwordForm.get('confirmPassword')?.errors?.['required']">Please confirm your password.</span>
+            <span *ngIf="passwordForm.get('confirmPassword')?.errors?.['passwordMismatch']">Passwords do not
+              match.</span>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-4 flex justify-end">
+          <button type="submit"
+            class="rounded-lg bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-md transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+            Update Password
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<!-- Fallback UI if the signal is empty/loading -->
+<ng-template #noUser>
+  <div class="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-gray-500">
+    <svg class="animate-spin h-8 w-8 text-indigo-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+      viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+      </path>
+    </svg>
+    <p class="text-sm font-medium">Loading profile...</p>
+  </div>
+</ng-template>

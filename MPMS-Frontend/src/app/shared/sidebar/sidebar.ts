@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   templateUrl: './sidebar.html'
 })
-export class SidebarComponent {
+export class Sidebar {
 
   menuItems = [
     { icon: '📊', label: 'Dashboard' },

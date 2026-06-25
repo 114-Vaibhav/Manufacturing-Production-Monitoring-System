@@ -65,4 +65,12 @@ namespace backend.Models.DTOs
         public int ProductionPlanId { get; set; }
         public int ProducedQuantity { get; set; }
     }
+
+    public class UpdatePasswordRequest
+    {
+        public int UserId { get; set; }
+        public string CurrentPassword { get; set; } = string.Empty;
+        public string NewPassword { get; set; } = string.Empty;
+    }
+
 }

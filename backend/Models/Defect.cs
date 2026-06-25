@@ -3,20 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace backend.Models
 {
-    public enum DefectSeverity
-    {
-        Low,
-        Medium,
-        High,
-        Critical
-    }
-    public enum DefectType
-    {
-        Mechanical,
-        Electrical,
-        Software,
-        Quality
-    }
+
     public class Defect
     {
         [Key]

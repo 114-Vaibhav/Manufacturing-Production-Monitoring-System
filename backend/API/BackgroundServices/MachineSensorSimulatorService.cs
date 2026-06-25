@@ -32,7 +32,7 @@ namespace API.BackgroundServices
                     DateTime.Now);
 
                 await Task.Delay(
-                    TimeSpan.FromSeconds(30),
+                    TimeSpan.FromSeconds(86400),
                     stoppingToken);
             }
         }

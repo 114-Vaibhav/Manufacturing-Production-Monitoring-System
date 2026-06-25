@@ -5,6 +5,8 @@ using backend.Models.DTOs;
 using System.Security.Cryptography;
 using System.Security.Authentication;
 using System.Text;
+using System.Net.Http.Headers;
+
 
 namespace BusinessLayer.Services
 {
@@ -48,7 +50,7 @@ namespace BusinessLayer.Services
         public async Task<LoginResponse> LoginUser(LoginRequest request)
         {
             //  UserValidator.ValidateLoginRequest(request);
-
+            Console.WriteLine(request);
              User user = await _userRepository.GetByUserName(request.UserName);
             if (user == null)
             {
@@ -60,27 +62,77 @@ namespace BusinessLayer.Services
                 byte[] computedHash = hMACSHA256.ComputeHash(Encoding.UTF8.GetBytes(request.Password));
                 if (!computedHash.SequenceEqual(user.PasswordHash))
                 {
-                    throw new AuthenticationException("Invalid username or password.");
+                    throw new AuthenticationException("Invalid username or password or role.");
                 }
 
             }
+            if(user.Role != request.Role)
+            {
+                // throw new AuthenticationException()
+                throw new AuthenticationException("Invalid Role");
+            }
+            
             Console.WriteLine($"User {user.UserName} authenticated successfully with role {user.Role}.");
             
+            // 1. Generate the JWT Access Token
+            var accessToken = _tokenService.CreateNewToken(new TokenRequest
+            {
+                UserId = user.UserId,
+                Username = user.UserName,
+                Role = user.Role
+            });
+
+            // 2. Generate the Refresh Token
+            var refreshToken = _tokenService.GenerateRefreshToken();
+
+            // 3. Return the updated response
             return new LoginResponse
             {
+                UserId = user.UserId,
                 UserName = user.UserName,
-                Token = _tokenService.CreateNewToken(new TokenRequest
-                {
-                    UserId = user.UserId,
-                    Username = user.UserName,
-                    Role = user.Role
-                })
-            };                  
+                FullName = user.FullName,
+                Email = user.Email,
+                Role = user.Role,
+                Status = user.Status,
+                AccessToken = accessToken,      // <-- Attached Access Token
+                RefreshToken = refreshToken     // <-- Attached Refresh Token
+            };          
         }
 
         public async Task<User> GetUser(int id)
         {
             return await _userRepository.Get(id);
+        }
+        public static bool IsValid(string password)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+                return false;
+
+            bool hasMinimum8Chars = password.Length >= 8;
+            bool hasUpperChar = password.Any(char.IsUpper);
+            bool hasLowerChar = password.Any(char.IsLower);
+            bool hasNumber = password.Any(char.IsDigit);
+            bool hasSpecialChar = password.Any(ch => !char.IsLetterOrDigit(ch));
+
+            return hasMinimum8Chars && 
+                hasUpperChar && 
+                hasLowerChar && 
+                hasNumber && 
+                hasSpecialChar;
+        }
+
+        public async Task<User> UpdatePassword(UpdatePasswordRequest request)
+        {
+            HMACSHA256 hMACSHA256 = new HMACSHA256();
+            if(!IsValid(request.NewPassword))
+            {
+                throw new ArgumentException("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+                // return null;
+            }
+            User user = await GetUser(request.UserId);
+            user.PasswordHash = hMACSHA256.ComputeHash(Encoding.UTF8.GetBytes(request.NewPassword));
+            user.HashKey = hMACSHA256.Key;
+            return await _userRepository.Update(user.UserId,user);
         }
         
     }
