@@ -1,0 +1,16 @@
+<section class="min-h-full bg-gray-50 p-4 sm:p-6">
+  <div class="mx-auto flex max-w-7xl flex-col gap-5">
+    <app-page-header title="Production Analytics" description="Read calculated production analytics from the ProductionAnalytics API."></app-page-header>
+
+    <div *ngIf="errorMessage" class="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{{ errorMessage }}</div>
+
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <app-search-box placeholder="Search analytics" [(value)]="searchTerm"></app-search-box>
+      <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [itemCount]="analytics.length" [loading]="loading" (previousPage)="previousPage()" (nextPage)="nextPage()"></app-pagination>
+    </div>
+
+    <app-loading-spinner *ngIf="loading" label="Loading production analytics..."></app-loading-spinner>
+    <app-empty-state *ngIf="!loading && filteredAnalytics.length === 0" message="No analytics found."></app-empty-state>
+    <app-data-table *ngIf="!loading && filteredAnalytics.length > 0" [columns]="columns" [rows]="filteredAnalytics" [canEdit]="false" [canDelete]="false"></app-data-table>
+  </div>
+</section>

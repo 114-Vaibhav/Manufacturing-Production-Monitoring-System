@@ -1,21 +1,11 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-navbar',
-//   imports: [],
-//   templateUrl: './navbar.html',
-//   styleUrl: './navbar.css',
-// })
-// export class Navbar {}
-
-import { Component } from '@angular/core';
-import { inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router'; // <-- ADDED: Required for routerLink in HTML
 import { AuthApiService } from '../../services/auth.services';
-
 
 @Component({
   selector: 'app-navbar',
-  
+  standalone: true, // <-- RESTORED: Required to use the imports array
+  imports: [RouterLink], // <-- ADDED: Gives HTML permission to use routerLink
   templateUrl: './navbar.html'
 })
 export class Navbar {

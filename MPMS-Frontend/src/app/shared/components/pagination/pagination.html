@@ -1,0 +1,21 @@
+<div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+  <span class="text-sm text-gray-600">Page {{ pageNumber }}</span>
+  <div class="flex gap-2">
+    <button
+      type="button"
+      (click)="previousPage.emit()"
+      [disabled]="!canGoPrevious"
+      class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+    >
+      Previous
+    </button>
+    <button
+      type="button"
+      (click)="nextPage.emit()"
+      [disabled]="!canGoNext"
+      class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+    >
+      Next
+    </button>
+  </div>
+</div>

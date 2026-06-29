@@ -1,0 +1,22 @@
+<section class="min-h-full bg-gray-50 p-4 sm:p-6">
+    <div class="mx-auto flex max-w-7xl flex-col gap-5">
+        <app-page-header title="System Logs"
+            description="View system activity logs and user actions."></app-page-header>
+
+        <div *ngIf="errorMessage"
+            class="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+            {{ errorMessage }}
+        </div>
+
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <app-search-box placeholder="Search logs" [(value)]="searchTerm"></app-search-box>
+            <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [itemCount]="logs.length"
+                [loading]="loading" (previousPage)="previousPage()" (nextPage)="nextPage()"></app-pagination>
+        </div>
+
+        <app-loading-spinner *ngIf="loading" label="Loading logs..."></app-loading-spinner>
+        <app-empty-state *ngIf="!loading && filteredLogs.length === 0" message="No logs found."></app-empty-state>
+        <app-data-table *ngIf="!loading && filteredLogs.length > 0" [columns]="columns"
+            [rows]="filteredLogs"></app-data-table>
+    </div>
+</section>

@@ -1,0 +1,41 @@
+<div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200 text-sm">
+      <thead class="bg-gray-50">
+        <tr>
+          <th *ngFor="let column of columns" class="px-4 py-3 text-left font-semibold text-gray-700">
+            {{ column.label }}
+          </th>
+          <th *ngIf="canEdit || canDelete" class="px-4 py-3 text-right font-semibold text-gray-700">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <tr *ngFor="let row of rows" class="hover:bg-gray-50">
+          <td *ngFor="let column of columns" class="max-w-72 px-4 py-3 text-gray-800">
+            <span class="line-clamp-2">{{ column.value(row) }}</span>
+          </td>
+          <td *ngIf="canEdit || canDelete" class="px-4 py-3">
+            <div class="flex justify-end gap-2">
+              <button
+                *ngIf="canEdit"
+                type="button"
+                (click)="edit.emit(row)"
+                class="rounded-md border border-indigo-200 px-3 py-1.5 text-sm font-medium text-indigo-700 transition hover:bg-indigo-50"
+              >
+                Edit
+              </button>
+              <button
+                *ngIf="canDelete"
+                type="button"
+                (click)="delete.emit(row)"
+                class="rounded-md border border-red-200 px-3 py-1.5 text-sm font-medium text-red-700 transition hover:bg-red-50"
+              >
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

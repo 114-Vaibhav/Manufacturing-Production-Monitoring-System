@@ -1,11 +1,8 @@
-<!-- We unwrap the signal using 'as user' so we can reference its properties cleanly -->
 <div class="min-h-screen bg-gray-100 p-6" *ngIf="currentUser() as user; else noUser">
   <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-    <!-- LEFT COLUMN: Profile Details -->
     <div class="col-span-1 bg-white rounded-2xl shadow-md p-6 h-fit border border-gray-200">
       <div class="flex flex-col items-center">
-        <!-- Dummy Emoji Avatar -->
         <div
           class="w-24 h-24 rounded-full bg-slate-100 flex items-center justify-center text-5xl mb-4 shadow-inner border-2 border-slate-200">
           👨‍💻
@@ -33,83 +30,110 @@
       </div>
     </div>
 
-    <!-- RIGHT COLUMN: Password Change Form -->
-    <div class="col-span-1 lg:col-span-2 bg-white rounded-2xl shadow-md p-6 border border-gray-200">
-      <h3 class="text-lg font-bold text-gray-900 border-b border-gray-100 pb-3 mb-6">
-        Change Password
-      </h3>
+    <div class="col-span-1 lg:col-span-2 flex flex-col gap-6">
 
-      <!-- Success Message Banner -->
-      <div *ngIf="successMessage"
-        class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg flex items-center gap-2 text-sm font-medium">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-        </svg>
-        {{ successMessage }}
+      <div *ngIf="user.role === UserRoleEnum.Admin" class="bg-white rounded-2xl shadow-md p-6 border border-gray-200">
+
+        <div class="flex items-center justify-between border-b border-gray-100 pb-3 mb-6">
+          <h3 class="text-lg font-bold text-gray-900">Admin Controls</h3>
+          <div class="flex gap-3">
+            <button (click)="toggleCreateUser()"
+              [ngClass]="showCreateUserView ? 'bg-indigo-100 text-indigo-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+              class="px-4 py-2 rounded-lg text-sm font-semibold transition focus:outline-none">
+              {{ showCreateUserView ? 'Close Form' : 'Create New User' }}
+            </button>
+
+            <button (click)="toggleLogs()"
+              [ngClass]="showLogsView ? 'bg-indigo-100 text-indigo-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+              class="px-4 py-2 rounded-lg text-sm font-semibold transition focus:outline-none">
+              {{ showLogsView ? 'Close Logs' : 'View Logs' }}
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="showCreateUserView" class="animate-fade-in">
+          <app-create-user></app-create-user>
+        </div>
+
+        <div *ngIf="showLogsView" class="animate-fade-in">
+          <app-get-logs></app-get-logs>
+        </div>
+
+        <div *ngIf="!showCreateUserView && !showLogsView" class="text-sm text-gray-500 text-center py-4">
+          Select an admin action above to get started.
+        </div>
       </div>
 
-      <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPasswordChange()" class="space-y-5">
+      <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-200">
+        <h3 class="text-lg font-bold text-gray-900 border-b border-gray-100 pb-3 mb-6">
+          Change Password
+        </h3>
 
-        <!-- Previous Password -->
-        <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1">Previous Password</label>
-          <input type="password" formControlName="previousPassword" placeholder="Enter current password"
-            class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
-            [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-100': passwordForm.get('previousPassword')?.invalid && passwordForm.get('previousPassword')?.touched}">
-          <div *ngIf="passwordForm.get('previousPassword')?.invalid && passwordForm.get('previousPassword')?.touched"
-            class="text-red-500 text-xs mt-1">
-            Previous password is required.
-          </div>
+        <div *ngIf="successMessage"
+          class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg flex items-center gap-2 text-sm font-medium">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          {{ successMessage }}
         </div>
 
-        <!-- New Password -->
-        <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1">New Password</label>
-          <input type="password" formControlName="newPassword" placeholder="Enter new password (min 8 characters)"
-            class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
-            [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-100': passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched}">
-          <div *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched"
-            class="text-red-500 text-xs mt-1">
-            <span *ngIf="passwordForm.get('newPassword')?.errors?.['required']">New password is required.</span>
-            <span *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']">Password must be at least 8
-              characters.</span>
+        <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPasswordChange()" class="space-y-5">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Previous Password</label>
+            <input type="password" formControlName="previousPassword" placeholder="Enter current password"
+              class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-100': passwordForm.get('previousPassword')?.invalid && passwordForm.get('previousPassword')?.touched}">
+            <div *ngIf="passwordForm.get('previousPassword')?.invalid && passwordForm.get('previousPassword')?.touched"
+              class="text-red-500 text-xs mt-1">
+              Previous password is required.
+            </div>
           </div>
-          <div
-            *ngIf="passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.hasError('passwordSame')"
-            class="text-red-500 text-xs mt-1">
-            New password cannot be the same as the current password.
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">New Password</label>
+            <input type="password" formControlName="newPassword" placeholder="Enter new password (min 8 characters)"
+              class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-100': passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched}">
+            <div *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched"
+              class="text-red-500 text-xs mt-1">
+              <span *ngIf="passwordForm.get('newPassword')?.errors?.['required']">New password is required.</span>
+              <span *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']">Password must be at least 8
+                characters.</span>
+            </div>
+            <div
+              *ngIf="passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.hasError('passwordSame')"
+              class="text-red-500 text-xs mt-1">
+              New password cannot be the same as the current password.
+            </div>
           </div>
-        </div>
 
-        <!-- Confirm Password -->
-        <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1">Confirm New Password</label>
-          <input type="password" formControlName="confirmPassword" placeholder="Confirm new password"
-            class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
-            [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-100': passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched}">
-          <div *ngIf="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched"
-            class="text-red-500 text-xs mt-1">
-            <span *ngIf="passwordForm.get('confirmPassword')?.errors?.['required']">Please confirm your password.</span>
-            <span *ngIf="passwordForm.get('confirmPassword')?.errors?.['passwordMismatch']">Passwords do not
-              match.</span>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Confirm New Password</label>
+            <input type="password" formControlName="confirmPassword" placeholder="Confirm new password"
+              class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              [ngClass]="{'border-red-500 focus:border-red-500 focus:ring-red-100': passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched}">
+            <div *ngIf="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched"
+              class="text-red-500 text-xs mt-1">
+              <span *ngIf="passwordForm.get('confirmPassword')?.errors?.['required']">Please confirm your
+                password.</span>
+              <span *ngIf="passwordForm.get('confirmPassword')?.errors?.['passwordMismatch']">Passwords do not
+                match.</span>
+            </div>
           </div>
-        </div>
 
-        <!-- Submit Button -->
-        <div class="pt-4 flex justify-end">
-          <button type="submit"
-            class="rounded-lg bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-md transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
-            Update Password
-          </button>
-        </div>
+          <div class="pt-4 flex justify-end">
+            <button type="submit"
+              class="rounded-lg bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-md transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+              Update Password
+            </button>
+          </div>
+        </form>
+      </div>
 
-      </form>
     </div>
-
   </div>
 </div>
 
-<!-- Fallback UI if the signal is empty/loading -->
 <ng-template #noUser>
   <div class="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-gray-500">
     <svg class="animate-spin h-8 w-8 text-indigo-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none"

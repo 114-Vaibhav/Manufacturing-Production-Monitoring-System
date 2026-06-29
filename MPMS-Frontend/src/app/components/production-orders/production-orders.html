@@ -1,0 +1,75 @@
+<section class="min-h-full bg-gray-50 p-4 sm:p-6">
+  <div class="mx-auto flex max-w-7xl flex-col gap-5">
+    <app-page-header title="Production Orders"
+      description="Create and update production orders from the ProductionOrders API."></app-page-header>
+    <div *ngIf="errorMessage"
+      class="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{{ errorMessage }}
+    </div>
+    <div *ngIf="successMessage"
+      class="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">{{
+      successMessage }}</div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+      <div class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="text-base font-semibold text-gray-900">{{ editingOrderId === null ? 'Create Production Order' :
+          'Update Production Order' }}</h2>
+        <button type="button" (click)="resetForm()"
+          class="rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Clear</button>
+      </div>
+      <div class="grid gap-4 md:grid-cols-2">
+        <label class="flex flex-col gap-1.5 text-sm font-medium text-gray-700">Plan ID
+          <input type="number" formControlName="planId"
+            class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+          <span *ngIf="form.controls.planId.touched && form.controls.planId.invalid" class="text-xs text-red-600">Plan
+            ID must be greater than 0.</span>
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm font-medium text-gray-700">Machine ID
+          <input type="number" formControlName="machineId"
+            class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+          <span *ngIf="form.controls.machineId.touched && form.controls.machineId.invalid"
+            class="text-xs text-red-600">Machine ID must be greater than 0.</span>
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm font-medium text-gray-700">Quantity
+          <input type="number" formControlName="quantity"
+            class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+          <span *ngIf="form.controls.quantity.touched && form.controls.quantity.invalid"
+            class="text-xs text-red-600">Quantity must be greater than 0.</span>
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm font-medium text-gray-700">Produced Quantity
+          <input type="number" formControlName="producedQuantity"
+            class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+          <span *ngIf="form.controls.producedQuantity.touched && form.controls.producedQuantity.invalid"
+            class="text-xs text-red-600">Produced Quantity must be at least 0.</span>
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm font-medium text-gray-700">Status
+          <select formControlName="status"
+            class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+            <option value="" disabled>Select status</option>
+            <option *ngFor="let opt of statusOptions" [value]="opt.value">{{ opt.label }}</option>
+          </select>
+          <span *ngIf="form.controls.status.touched && form.controls.status.invalid" class="text-xs text-red-600">Status
+            is required.</span>
+        </label>
+      </div>
+      <div class="mt-4 flex justify-end">
+        <button type="submit" [disabled]="saving"
+          class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60">{{
+          saving ? 'Saving...' : editingOrderId === null ? 'Create' : 'Update' }}</button>
+      </div>
+    </form>
+
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <app-search-box placeholder="Search production orders" [(value)]="searchTerm"></app-search-box>
+      <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [itemCount]="orders.length" [loading]="loading"
+        (previousPage)="previousPage()" (nextPage)="nextPage()"></app-pagination>
+    </div>
+    <app-loading-spinner *ngIf="loading" label="Loading production orders..."></app-loading-spinner>
+    <app-empty-state *ngIf="!loading && filteredOrders.length === 0"
+      message="No production orders found."></app-empty-state>
+    <app-data-table *ngIf="!loading && filteredOrders.length > 0" [columns]="columns" [rows]="filteredOrders"
+      (edit)="editOrder($event)" (delete)="requestDelete($event)"></app-data-table>
+  </div>
+  <app-confirm-dialog [open]="orderToDelete !== null" title="Delete production order"
+    message="Delete this production order?" confirmText="Delete" (confirmed)="confirmDelete()"
+    (cancelled)="orderToDelete = null"></app-confirm-dialog>
+</section>

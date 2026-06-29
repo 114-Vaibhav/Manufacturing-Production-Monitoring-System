@@ -1,22 +1,35 @@
-<div class="w-64 min-h-screen bg-slate-900 border-r border-slate-700">
+<div [ngClass]="isSidebarOpen ? 'w-64' : 'w-20'"
+  class="min-h-screen bg-slate-900 border-r border-slate-700 transition-all duration-300 flex flex-col">
 
-  <ul class="mt-4">
+  <div class="p-4 flex" [ngClass]="isSidebarOpen ? 'justify-end' : 'justify-center'">
+    <button (click)="toggleSidebar()"
+      class="text-slate-300 hover:text-cyan-400 focus:outline-none p-1 rounded-md hover:bg-slate-800 transition">
+      <svg *ngIf="!isSidebarOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+      <svg *ngIf="isSidebarOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+      </svg>
+    </button>
+  </div>
 
+  <ul class="mt-2 flex-1">
     <li *ngFor="let item of menuItems" class="mx-3 mb-2">
 
-      <a href="#"
-        class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-cyan-400 transition">
+      <a [routerLink]="item.route" routerLinkActive="bg-slate-800 text-cyan-400"
+        [title]="!isSidebarOpen ? item.label : ''"
+        class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-cyan-400 transition cursor-pointer overflow-hidden whitespace-nowrap">
 
-        <span>{{ item.icon }}</span>
+        <span class="text-xl flex-shrink-0">{{ item.icon }}</span>
 
-        <span>
+        <span *ngIf="isSidebarOpen" class="transition-opacity duration-300">
           {{ item.label }}
         </span>
 
       </a>
 
     </li>
-
   </ul>
-
 </div>

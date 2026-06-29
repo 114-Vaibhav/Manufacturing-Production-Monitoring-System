@@ -1,0 +1,40 @@
+<section class="min-h-full bg-gray-50 p-4 sm:p-6">
+  <div class="mx-auto flex max-w-7xl flex-col gap-5">
+    <app-page-header title="Maintenance Logs" description="Track machine maintenance activity from the MaintenanceLogs API."></app-page-header>
+    <div *ngIf="errorMessage" class="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">{{ successMessage }}</div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+      <div class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="text-base font-semibold text-gray-900">{{ editingLogId === null ? 'Create Maintenance Log' : 'Update Maintenance Log' }}</h2>
+        <button type="button" (click)="resetForm()" class="rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Clear</button>
+      </div>
+      <div class="grid gap-4 md:grid-cols-2">
+        <label class="flex flex-col gap-1.5 text-sm font-medium text-gray-700">Machine ID
+          <input type="number" formControlName="machineId" class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+          <span *ngIf="form.controls.machineId.touched && form.controls.machineId.invalid" class="text-xs text-red-600">Machine ID must be greater than 0.</span>
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm font-medium text-gray-700">Issue Description
+          <textarea rows="3" formControlName="issueDescription" class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"></textarea>
+          <span *ngIf="form.controls.issueDescription.touched && form.controls.issueDescription.invalid" class="text-xs text-red-600">Issue description must be 5-500 characters.</span>
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm font-medium text-gray-700 md:col-span-2">Resolution
+          <textarea rows="3" formControlName="resolution" class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"></textarea>
+          <span *ngIf="form.controls.resolution.touched && form.controls.resolution.invalid" class="text-xs text-red-600">Resolution must be 3-500 characters.</span>
+        </label>
+      </div>
+      <div class="mt-4 flex justify-end">
+        <button type="submit" [disabled]="saving" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60">{{ saving ? 'Saving...' : editingLogId === null ? 'Create' : 'Update' }}</button>
+      </div>
+    </form>
+
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <app-search-box placeholder="Search maintenance logs" [(value)]="searchTerm"></app-search-box>
+      <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [itemCount]="logs.length" [loading]="loading" (previousPage)="previousPage()" (nextPage)="nextPage()"></app-pagination>
+    </div>
+    <app-loading-spinner *ngIf="loading" label="Loading maintenance logs..."></app-loading-spinner>
+    <app-empty-state *ngIf="!loading && filteredLogs.length === 0" message="No maintenance logs found."></app-empty-state>
+    <app-data-table *ngIf="!loading && filteredLogs.length > 0" [columns]="columns" [rows]="filteredLogs" (edit)="editLog($event)" (delete)="requestDelete($event)"></app-data-table>
+  </div>
+  <app-confirm-dialog [open]="logToDelete !== null" title="Delete maintenance log" message="Delete this maintenance log?" confirmText="Delete" (confirmed)="confirmDelete()" (cancelled)="logToDelete = null"></app-confirm-dialog>
+</section>

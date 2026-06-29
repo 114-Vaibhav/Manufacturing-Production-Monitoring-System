@@ -1,0 +1,75 @@
+<section class="min-h-full bg-gray-50 p-4 sm:p-6">
+  <div class="mx-auto flex max-w-7xl flex-col gap-5">
+    <app-page-header title="Production Plans"
+      description="Manage production plans from the ProductionPlans API."></app-page-header>
+    <div *ngIf="errorMessage"
+      class="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{{ errorMessage }}
+    </div>
+    <div *ngIf="successMessage"
+      class="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">{{
+      successMessage }}</div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+      <div class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="text-base font-semibold text-gray-900">{{ editingPlanId === null ? 'Create Production Plan' : 'Update
+          Production Plan' }}</h2>
+        <button type="button" (click)="resetForm()"
+          class="rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Clear</button>
+      </div>
+      <div class="grid gap-4 md:grid-cols-2">
+        <label class="flex flex-col gap-1.5 text-sm font-medium text-gray-700">Product Name
+          <input type="text" formControlName="productName"
+            class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+          <span *ngIf="form.controls.productName.touched && form.controls.productName.invalid"
+            class="text-xs text-red-600">Product name must be 2-100 characters.</span>
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm font-medium text-gray-700">Target Quantity
+          <input type="number" formControlName="targetQuantity"
+            class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+          <span *ngIf="form.controls.targetQuantity.touched && form.controls.targetQuantity.invalid"
+            class="text-xs text-red-600">Target quantity must be greater than 0.</span>
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm font-medium text-gray-700">Start Date
+          <input type="date" formControlName="startDate"
+            class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+          <span *ngIf="form.controls.startDate.touched && form.controls.startDate.invalid"
+            class="text-xs text-red-600">Start date is required.</span>
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm font-medium text-gray-700">End Date
+          <input type="date" formControlName="endDate"
+            class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+          <span *ngIf="form.controls.endDate.touched && form.controls.endDate.invalid" class="text-xs text-red-600">End
+            date is required.</span>
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm font-medium text-gray-700">Status
+          <select formControlName="status"
+            class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+            <option value="" disabled>Select status</option>
+            <option *ngFor="let opt of statusOptions" [value]="opt.value">{{ opt.label }}</option>
+          </select>
+          <span *ngIf="form.controls.status.touched && form.controls.status.invalid" class="text-xs text-red-600">Status
+            is required.</span>
+        </label>
+      </div>
+      <div class="mt-4 flex justify-end">
+        <button type="submit" [disabled]="saving"
+          class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60">{{
+          saving ? 'Saving...' : editingPlanId === null ? 'Create' : 'Update' }}</button>
+      </div>
+    </form>
+
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <app-search-box placeholder="Search production plans" [(value)]="searchTerm"></app-search-box>
+      <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [itemCount]="plans.length" [loading]="loading"
+        (previousPage)="previousPage()" (nextPage)="nextPage()"></app-pagination>
+    </div>
+    <app-loading-spinner *ngIf="loading" label="Loading production plans..."></app-loading-spinner>
+    <app-empty-state *ngIf="!loading && filteredPlans.length === 0"
+      message="No production plans found."></app-empty-state>
+    <app-data-table *ngIf="!loading && filteredPlans.length > 0" [columns]="columns" [rows]="filteredPlans"
+      (edit)="editPlan($event)" (delete)="requestDelete($event)"></app-data-table>
+  </div>
+  <app-confirm-dialog [open]="planToDelete !== null" title="Delete production plan"
+    message="Delete this production plan?" confirmText="Delete" (confirmed)="confirmDelete()"
+    (cancelled)="planToDelete = null"></app-confirm-dialog>
+</section>

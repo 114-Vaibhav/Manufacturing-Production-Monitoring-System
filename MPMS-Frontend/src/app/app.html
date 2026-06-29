@@ -4,8 +4,7 @@
 
   <div class="flex flex-1 overflow-hidden">
 
-    <app-sidebar *ngIf="currentUser()" class="w-64 bg-slate-900 border-r border-slate-700"></app-sidebar>
-
+    <app-sidebar *ngIf="currentUser()"></app-sidebar>
     <main class="flex-1 overflow-y-auto bg-gray-50">
 
       <router-outlet></router-outlet>
