@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
+import { tap } from 'rxjs/operators';
 import { LoginModel } from '../models/login.model';
 import { User } from '../models/user.model'; 
 import { environment } from '../../environments/environment.development';
@@ -24,6 +25,24 @@ export class AuthApiService {
     return this.http.post<User>(
       `${this.apiURL}/user-login`,
       loginModel
+    );
+  }
+
+  refreshToken() {
+    const accessToken = sessionStorage.getItem('accessToken');
+    const refreshToken = sessionStorage.getItem('refreshToken');
+
+    const payload = {
+      accessToken: accessToken, 
+      refreshToken: refreshToken
+    };
+
+    // Make sure the URL matches your C# backend route for refreshing tokens
+    return this.http.post<User>(`${this.apiURL}/refresh-token`, payload).pipe(
+      tap((user: User) => {
+        // This will instantly update your Signal and save the new tokens to sessionStorage
+        this.setCurrentUser(user); 
+      })
     );
   }
 

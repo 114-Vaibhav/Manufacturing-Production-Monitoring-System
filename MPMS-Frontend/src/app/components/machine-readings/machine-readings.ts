@@ -12,6 +12,7 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
 import { PaginationComponent } from '../../shared/components/pagination/pagination';
 import { SearchBoxComponent } from '../../shared/components/search-box/search-box';
 import { getApiErrorMessage } from '../../shared/error-message';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-machine-readings',
@@ -33,6 +34,7 @@ import { getApiErrorMessage } from '../../shared/error-message';
 export class MachineReadingsComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly machineReadingsService = inject(MachineReadingsService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   readonly columns: DataTableColumn<MachineReading>[] = [
     { label: 'ID', value: reading => reading.readingId },
@@ -44,6 +46,7 @@ export class MachineReadingsComponent implements OnInit {
   ];
 
   readonly form = this.fb.nonNullable.group({
+    readingId: [0, [Validators.required, Validators.min(1)]],
     machineId: [0, [Validators.required, Validators.min(1)]],
     temperature: [0, [Validators.required, Validators.min(-50), Validators.max(250)]],
     vibration: [0, [Validators.required, Validators.min(0)]],
@@ -65,22 +68,40 @@ export class MachineReadingsComponent implements OnInit {
     this.loadReadings();
   }
 
-  get filteredReadings(): MachineReading[] {
-    const term = this.searchTerm.trim().toLowerCase();
-    return term ? this.readings.filter(reading => `${reading.readingId} ${reading.machineId}`.includes(term)) : this.readings;
-  }
+  // get filteredReadings(): MachineReading[] {
+  //   const term = this.searchTerm.trim().toLowerCase();
+  //   return term ? this.readings.filter(reading => `${reading.readingId} ${reading.machineId}`.includes(term)) : this.readings;
+  // }
+get filteredReadings(): MachineReading[] {
+  const term = (this.searchTerm || '').trim().toLowerCase();
+  return term ? this.readings.filter(reading => `${reading.readingId} ${reading.machineId}`.includes(term)) : this.readings;
+}
+loadReadings(): void {
+  this.loading = true;
+  this.errorMessage = '';
+  this.machineReadingsService
+    .getMachineReadings(this.pageNumber, this.pageSize)
+    .subscribe({
+      next: readings => {
+        // this.readings = readings;
+        // this.loading = false; // Add this here
+        // console.log('Received readings:', this.readings);
+        this.readings = readings;
+          
+          // 3. Turn off loading and trigger change detection here
+          this.loading = false;
+          this.cdr.markForCheck(); 
+          
+          console.log('Received readings:', this.readings);
+      },
+      error: err => {
+        this.errorMessage = getApiErrorMessage(err, 'Unable to load machine readings.');
+        this.loading = false; // Add this here
+      }
+    });
+}
 
-  loadReadings(): void {
-    this.loading = true;
-    this.errorMessage = '';
-    this.machineReadingsService
-      .getMachineReadings(this.pageNumber, this.pageSize)
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe({
-        next: readings => (this.readings = readings),
-        error: err => (this.errorMessage = getApiErrorMessage(err, 'Unable to load machine readings.')),
-      });
-  }
+  
 
   submit(): void {
     if (this.editingReadingId === null) {
@@ -112,6 +133,7 @@ export class MachineReadingsComponent implements OnInit {
   editReading(reading: MachineReading): void {
     this.editingReadingId = reading.readingId;
     this.form.setValue({
+      readingId: reading.readingId,
       machineId: reading.machineId,
       temperature: reading.temperature,
       vibration: reading.vibration,

@@ -34,12 +34,33 @@ export class CreateUser implements OnInit {
     { label: 'Suspended', value: UserStatus.Suspended },
   ];
 
+  // readonly form = this.fb.nonNullable.group(
+  //   {
+  //     username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50), Validators.pattern(/^[a-zA-Z0-9_-]+$/)]],
+  //     fullName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+  //     email: ['', [Validators.required, Validators.email]],
+  //     password: ['', [Validators.required, Validators.minLength(8)]],
+  //     passwordConfirm: ['', [Validators.required]],
+  //     role: [UserRole.Operator, [Validators.required]],
+  //     status: [UserStatus.Active, [Validators.required]],
+  //   },
+  //   { validators: this.passwordMatchValidator }
+  // );
+  // Add this inside your CreateUser component:
   readonly form = this.fb.nonNullable.group(
     {
       username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50), Validators.pattern(/^[a-zA-Z0-9_-]+$/)]],
       fullName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: [
+        '', 
+        [
+          Validators.required, 
+          Validators.minLength(8),
+          // Enforce Upper, Lower, Number, and Special character to match C# IsValid()
+          Validators.pattern(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).+/) 
+        ]
+      ],
       passwordConfirm: ['', [Validators.required]],
       role: [UserRole.Operator, [Validators.required]],
       status: [UserStatus.Active, [Validators.required]],
@@ -60,7 +81,6 @@ export class CreateUser implements OnInit {
   get passwordMatchError(): boolean {
     return this.form.hasError('passwordMismatch') && this.form.controls.passwordConfirm.touched;
   }
-
   submit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -77,21 +97,59 @@ export class CreateUser implements OnInit {
       fullName: formValue.fullName,
       email: formValue.email,
       password: formValue.password,
-      role: formValue.role,
-      status: formValue.status,
+      // FORCE THESE TO NUMBERS:
+      role: Number(formValue.role),
+      status: Number(formValue.status),
     };
 
+    // this.userService
+      // ... rest of the method remains the same
+  // submit(): void {
+  //   if (this.form.invalid) {
+  //     this.form.markAllAsTouched();
+  //     return;
+  //   }
+
+  //   this.saving = true;
+  //   this.errorMessage = '';
+  //   this.successMessage = '';
+
+  //   const formValue = this.form.getRawValue();
+  //   const request: CreateUserRequest = {
+  //     username: formValue.username,
+  //     fullName: formValue.fullName,
+  //     email: formValue.email,
+  //     password: formValue.password,
+  //     role: formValue.role,
+  //     status: formValue.status,
+  //   };
+
+  //   this.userService
+  //     .createUser(request)
+  //     .pipe(finalize(() => (this.saving = false)))
+  //     .subscribe({
+  //       next: () => {
+  //         this.successMessage = 'User created successfully.';
+  //         this.resetForm();
+  //       },
+  //       error: err => (this.errorMessage = getApiErrorMessage(err, 'Unable to create user.')),
+  //     });
+  // }
     this.userService
-      .createUser(request)
-      .pipe(finalize(() => (this.saving = false)))
-      .subscribe({
-        next: () => {
-          this.successMessage = 'User created successfully.';
-          this.resetForm();
-        },
-        error: err => (this.errorMessage = getApiErrorMessage(err, 'Unable to create user.')),
-      });
-  }
+        .createUser(request)
+        .pipe(finalize(() => (this.saving = false)))
+        .subscribe({
+          next: () => {
+            this.successMessage = 'User created successfully.';
+            this.resetForm();
+          },
+          error: err => {
+            // ADD THIS LINE to see the exact C# error message in your browser console:
+            console.error('Backend returned an error:', err.error);
+            this.errorMessage = getApiErrorMessage(err, 'Unable to create user.');
+          }
+        });
+      }
 
   resetForm(): void {
     this.form.reset({

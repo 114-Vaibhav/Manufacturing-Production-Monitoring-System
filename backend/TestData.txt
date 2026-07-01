@@ -6,6 +6,13 @@
     "password": "SecurePassword123!",
     "role": 0
   },
+    {
+    "userName": "test-admin2",
+    "fullName": "test admin",
+    "email": "admin@admin",
+    "password": "Admin@123",
+    "role": 0
+  },
   {
     "userName": "operator",
     "fullName": "Operator",

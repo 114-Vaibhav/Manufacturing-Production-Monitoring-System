@@ -16,7 +16,11 @@
 
         <app-loading-spinner *ngIf="loading" label="Loading logs..."></app-loading-spinner>
         <app-empty-state *ngIf="!loading && filteredLogs.length === 0" message="No logs found."></app-empty-state>
-        <app-data-table *ngIf="!loading && filteredLogs.length > 0" [columns]="columns"
-            [rows]="filteredLogs"></app-data-table>
+        <!-- <app-data-table *ngIf="!loading && filteredLogs.length > 0" [columns]="columns"
+            [rows]="filteredLogs"></app-data-table> -->
+        <app-data-table *ngIf="!loading && filteredLogs.length > 0" [columns]="columns" [rows]="filteredLogs"
+            [canEdit]="false" [canDelete]="false">
+
+        </app-data-table>
     </div>
 </section>

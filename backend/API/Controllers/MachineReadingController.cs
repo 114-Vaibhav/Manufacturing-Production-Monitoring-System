@@ -26,7 +26,7 @@ namespace API.Controllers
             "Admin,PlantManager,ProductionManager," +
             "ProductionPlanner,QualityInspector," +
             "MaintenanceTechnician,Operator")]
-        [HttpGet]
+            [HttpGet] // <-- Removed the "{pageNumber}/{pageSize}" template
         public async Task<ActionResult<IEnumerable<MachineReading>>> GetMachineReadings(
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
@@ -35,6 +35,15 @@ namespace API.Controllers
 
             return Ok(machineReadings);
         }
+        // [HttpGet]
+        // public async Task<ActionResult<IEnumerable<MachineReading>>> GetMachineReadings(
+        //     [FromQuery] int pageNumber = 1,
+        //     [FromQuery] int pageSize = 10)
+        // {
+        //     var machineReadings = await _machineReadingServices.GetMachineReadings(pageNumber, pageSize);
+
+        //     return Ok(machineReadings);
+        // }
 
         [Authorize(Roles =
             "Admin,PlantManager,ProductionManager," +
@@ -44,7 +53,7 @@ namespace API.Controllers
         public async Task<ActionResult<MachineReading>> GetMachineReading(int id)
         {
             var machineReading = await _machineReadingServices.GetMachineReading(id);
-
+            Console.WriteLine("Sending machine readings");
             if (machineReading == null)
             {
                 return NotFound();
@@ -74,21 +83,47 @@ namespace API.Controllers
             "Admin,PlantManager,ProductionManager," +
             "MaintenanceTechnician")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<MachineReading>> PutMachineReading(
-            int id,
-            MachineReadingRequest machineReading)
+        public async Task<ActionResult<MachineReading>> PutMachineReading(int id, MachineReadingRequest machineReading)
         {
-            var updatedMachineReading =
-                await _machineReadingServices.UpdateMachineReading(id, machineReading);
-            _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Update", nameof(MachineReading), id);
-
-            if (updatedMachineReading == null)
+            try
             {
-                return NotFound();
-            }
+                Console.WriteLine($"[DEBUG] Starting update for ID: {id}");
+                
+                var updatedMachineReading = await _machineReadingServices.UpdateMachineReading(id, machineReading);
+                Console.WriteLine("[DEBUG] Update finished.");
 
-            return Ok(updatedMachineReading);
+                _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Update", nameof(MachineReading), id);
+                Console.WriteLine("[DEBUG] Audit log added.");
+
+                if (updatedMachineReading == null) return NotFound();
+
+                return Ok(updatedMachineReading);
+            }
+            catch (Exception ex)
+            {
+                // This forces the exact error to print to your terminal
+                Console.WriteLine($"[CRITICAL ERROR]: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                throw; 
+            }
         }
+        // [HttpPut("{id}")]
+        // public async Task<ActionResult<MachineReading>> PutMachineReading(
+        //     int id,
+        //     MachineReadingRequest machineReading)
+        // {
+        //     var updatedMachineReading =
+        //         await _machineReadingServices.UpdateMachineReading(id, machineReading);
+        //     _auditLogService.Add(User.Identity?.Name ?? string.Empty, "Update", nameof(MachineReading), id);
+
+        //     Console.WriteLine("Updating machine readings");
+        //     if (updatedMachineReading == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     return Ok(updatedMachineReading);
+        // }
 
         [Authorize(Roles = "Admin,PlantManager")]
         [HttpDelete("{id}")]

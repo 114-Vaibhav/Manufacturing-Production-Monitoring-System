@@ -8,6 +8,7 @@ export interface MachineReading {
 }
 
 export interface MachineReadingRequest {
+  readingId: number;
   machineId: number;
   temperature: number;
   vibration: number;

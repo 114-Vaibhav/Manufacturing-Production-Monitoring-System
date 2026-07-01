@@ -11,6 +11,7 @@ namespace backend.Models.DTOs
 
     public class MachineReadingRequest
     {
+        public int ReadingId { get; set; }
         public int MachineId { get; set; }
         public double Temperature { get; set; }
         public double Vibration { get; set; }

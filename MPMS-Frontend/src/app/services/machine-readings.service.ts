@@ -12,6 +12,9 @@ export class MachineReadingsService {
 
   getMachineReadings(pageNumber: number, pageSize: number): Observable<MachineReading[]> {
     return this.http.get<MachineReading[]>(`${this.endpoint}?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+    // const readings = this.http.get<MachineReading[]>(`${this.endpoint}`);
+    // console.log(readings);
+    // return readings;
   }
 
   updateMachineReading(readingId: number, request: MachineReadingRequest): Observable<MachineReading> {

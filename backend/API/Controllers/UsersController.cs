@@ -41,33 +41,64 @@ namespace API.Controllers
 
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // [HttpPost("/user-register")]
         [HttpPost("/user-register")]
-        public async Task<ActionResult<RegisterUserResponse>> PostUser(RegisterUserRequest user)
+        
+        public async Task<ActionResult<RegisterUserResponse>> PostUser([FromBody] RegisterUserRequest request)
         {
+            // 1. MUST ADD THIS because you set SuppressModelStateInvalidFilter = true
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {   
-                var createdUser = await _userServices.RegisterUser(user);
+                var createdUser = await _userServices.RegisterUser(request);
                 return Ok(createdUser);
             }
             catch (ValidationException ex)
             {
-
                 return BadRequest(new
-
                 {
-
                     message = ex.Message,
-
                     errors = ex.Errors
-
                 });
-
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                // 2. Good practice: Log the actual error to your terminal for debugging
+                Console.WriteLine($"Registration Error: {ex.Message}");
+                return BadRequest(ex.Message);
             }
         }
+        // public async Task<ActionResult<RegisterUserResponse>> PostUser([FromBody] RegisterUserRequest user)
+        // // public async Task<ActionResult<RegisterUserResponse>> PostUser(RegisterUserRequest user)
+        // {
+        //     try
+        //     {   
+        //         var createdUser = await _userServices.RegisterUser(user);
+        //         return Ok(createdUser);
+        //     }
+        //     catch (ValidationException ex)
+        //     {
+
+        //         return BadRequest(new
+
+        //         {
+
+        //             message = ex.Message,
+
+        //             errors = ex.Errors
+
+        //         });
+
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return BadRequest(ex);
+        //     }
+        // }
 
         [HttpPost("/user-login")]
         public async Task<ActionResult<LoginResponse>> LoginUser(LoginRequest user)

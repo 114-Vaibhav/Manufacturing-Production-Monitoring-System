@@ -13,19 +13,28 @@ export interface CreateUserRequest {
   status: number;
 }
 
+// export interface UserLog {
+//   id: number;
+//   userId: number;
+//   username: string;
+//   action: string;
+//   resource: string;
+//   timestamp: string;
+//   details?: string;
+// }
+// Update this interface in user.service.ts
 export interface UserLog {
-  id: number;
-  userId: number;
-  username: string;
+  entityId: number;      // was 'id'
+  userName: string;      // was 'username'
   action: string;
-  resource: string;
-  timestamp: string;
-  details?: string;
+  entityName: string;    // was 'resource'
+  createdAt: string;     // was 'timestamp'
+  userId?: number;       // (Optional since backend isn't sending it right now)
+  details?: string;      // (Optional since backend isn't sending it right now)
 }
-
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private readonly endpoint = `${environment.apiUrl}/api/Users`;
+  private readonly endpoint = `${environment.apiUrl}/user-register`;
   private readonly logsEndpoint = `${environment.apiUrl}/api/admin/logs`;
 
   constructor(private http: HttpClient) {}

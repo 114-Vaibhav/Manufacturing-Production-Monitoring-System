@@ -40,15 +40,38 @@ namespace BusinessLayer.Services
 
             return await _machineReadingRepository.Create(machineReading);
         }
-
         public async Task<MachineReading?> UpdateMachineReading(int id, MachineReadingRequest request)
         {
-            var machineReading = MapMachineReading(request);
-            machineReading.ReadingId = id;
-            MachineReadingValidator.ValidateMachineReading(machineReading);
+            // 1. Fetch the existing entity so EF Core tracks THIS specific instance
+            var existingReading = await _machineReadingRepository.Get(id);
+            
+            if (existingReading == null)
+            {
+                return null; // Handle not found (Controller should return 404)
+            }
 
-            return await _machineReadingRepository.Update(id, machineReading);
+            // 2. Map the updated values onto the EXISTING tracked entity
+            existingReading.MachineId = request.MachineId;
+            existingReading.Temperature = request.Temperature;
+            existingReading.Vibration = request.Vibration;
+            existingReading.PowerConsumption = request.PowerConsumption;
+            existingReading.Timestamp = DateTime.UtcNow; 
+
+            // 3. Validate the updated entity
+            MachineReadingValidator.ValidateMachineReading(existingReading);
+
+            // 4. Pass the tracked entity to the repository. 
+            // Since it's the same instance EF Core loaded in step 1, it will save successfully.
+            return await _machineReadingRepository.Update(id, existingReading);
         }
+        // public async Task<MachineReading?> UpdateMachineReading(int id, MachineReadingRequest request)
+        // {
+        //     var machineReading = MapMachineReading(request);
+        //     machineReading.ReadingId = id;
+        //     MachineReadingValidator.ValidateMachineReading(machineReading);
+
+        //     return await _machineReadingRepository.Update(id, machineReading);
+        // }
 
         public async Task<MachineReading?> DeleteMachineReading(int id)
         {
@@ -59,6 +82,7 @@ namespace BusinessLayer.Services
         {
             return new MachineReading
             {
+                ReadingId = request.ReadingId,
                 MachineId = request.MachineId,
                 Temperature = request.Temperature,
                 Vibration = request.Vibration,
